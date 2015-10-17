@@ -281,40 +281,302 @@ $ -> $ Run Left
 
 -- Restart
 . -> _ Restart Right
-@ -> _ MirrorS Left
+@ -> _ Reflect Left
 * -> * Restart Right
--- MirrorS
-$ -> $ GetNext Right
-* -> * MirrorS Left
--- MirrorF
-$ -> $ GetNext Right
-* -> * MirrorF Right
--- GetNext
-` -> . TransA Left
-s -> . TransS Left
-k -> . TransK Left
-i -> . TransI Left
-. -> . GetNext Right
-_ -> _ ResEnd Left
--- TransA
-_ -> ` MirrorF Right
-* -> * TransA Left
--- TransS
-_ -> s MirrorF Right
-* -> * TransS Left
--- TransK
-_ -> k MirrorF Right
-* -> * TransK Left
--- TransI
-_ -> i MirrorF Right
-* -> * TransI Left
 
--- ResEnd
-. -> _ ResEnd Left
-$ -> $ Finish@ Right
+-- Reflect
+$ -> $ Refl@ Left
+* -> * Reflect Left
+-- Refl@
+_ -> @ rStart Right
 
--- Finish@
+
+
+
+-- rStart
+s -> s rMarkrS1 Right
+k -> k rMarkrK1 Right
+i -> i rMarkrI1 Right
+_ -> _ rRoll Left
+* -> * rStart Right
+-- rDelay
+* -> * rStart Right
+
+-- rMarkrS1
+` -> ` rMarkrS2 Right
+* -> * rDelay Left
+-- rMarkrS2
+` -> ` rMarkrS3 Right
+* -> * rDelay Left
+-- rMarkrS3
+` -> ` rMarkrS Left
+* -> * rDelay Left
+-- rMarkrK1
+` -> ` rMarkrK2 Right
+* -> * rDelay Left
+-- rMarkrK2
+` -> ` rMarkrK Left
+* -> * rDelay Left
+-- rMarkrI1
+` -> ` rMarkrI Left
+* -> * rDelay Left
+-- rMarkrS
+s -> S rStart Right
+* -> * rMarkrS Left
+-- rMarkrK
+k -> K rStart Right
+* -> * rMarkrK Left
+-- rMarkrI
+i -> I rStart Right
+* -> * rMarkrI Left
+
+-- rRoll
+$ -> $ rRun Right
+S -> S rBack Left
+K -> K rRollrP Left
+I -> I rRollrP Left
+* -> * rRoll Left
+-- rRollrP
+$ -> $ rRun Right
+S -> S rBack Left
+K -> K rRollrP Left
+I -> I rRollrP Left
+* -> * rRollrP Left
+-- rBack
+$ -> $ rRun Right
+S -> s rBack Left
+K -> K rBack Left
+I -> I rBack Left
+* -> * rBack Left
+
+-- rRun
+` -> . rApply Left
+s -> . rStackrS Left
+k -> . rStackrK Left
+i -> . rStackrI Left
+S -> . rSearchrS1 Right
+K -> . rSearchrK1 Right
+I -> . rSearchrI Right
+. -> . rRun Right
+_ -> _ rRestart Left
+
+-- rSearchrI
+` -> . rRun Right
+-- rSearchrK1
+` -> . rSearchrK2 Right
+-- rSearchrK2
+` -> . rProcrK Left
+-- rSearchrS1
+` -> . rSearchrS2 Right
+-- rSearchrS2
+` -> . rSearchrS3 Right
+-- rSearchrS3
+` -> . rProcrS Left
+
+-- rBackrK
+. -> ` rStackrK Left
+
+-- rProcrK
+@ -> _ rLeftrK Right
+* -> * rProcrK Left
+
+-- rLeftrK
+_ -> @ rLeftrK1 Right
+-- rLeftrK1
+_ -> _ rLeftrK2 Right
+* -> * rLeftrK1 Right
+-- rLeftrK2
+$ -> $ rPosrK Left
+_ -> _ rPosrK Left
+* -> * rLeftrK2 Right
+-- rPosrK
+* -> ^ rDelrK Left
+-- rDelrK
+_ -> _ rCopy Left
+* -> _ rDelrK Left
+-- rCopy
+` -> _ rCopyrA Right
+s -> _ rCopyrS Right
+k -> _ rCopyrK Right
+i -> _ rCopyrI Right
+_ -> _ rCopy Left
+@ -> _ rEndrK Right
+-- rCopyrA
+_ -> _ rCopyrA Right
+^ -> ` rStubrK Left
+-- rCopyrS
+_ -> _ rCopyrS Right
+^ -> s rStubrK Left
+-- rCopyrK
+_ -> _ rCopyrK Right
+^ -> k rStubrK Left
+-- rCopyrI
+_ -> _ rCopyrI Right
+^ -> i rStubrK Left
+-- rStubrK
+* -> ^ rCopy Left
+-- rEndrK
+_ -> _ rEndrK Right
+^ -> _ rPut@ Left
+
+-- rProcrS
+@ -> @ rProcrS1 Right
+* -> * rProcrS Left
+-- rProcrS1
+_ -> _ rProcrS2 Right
+-- rProcrS2
+_ -> _ rProcrS3 Right
+* -> * rProcrS2 Right
+-- rProcrS3
+_ -> _ rNextrDup Right
+* -> * rProcrS3 Right
+-- rNextrDup
+` -> ' rDuprA Left
+s -> S rDuprS Left
+k -> K rDuprK Left
+i -> I rDuprI Left
+$ -> $ rAddrA Left
+_ -> _ rAddrA Left
+-- rDuprA
+_ -> _ rDuprA1 Left
+* -> * rDuprA Left
+-- rDuprA1
+_ -> _ rReplacerA Left
+* -> * rDuprA1 Left
+-- rDuprS
+_ -> _ rDuprS1 Left
+* -> * rDuprS Left
+-- rDuprS1
+_ -> _ rReplacerS Left
+* -> * rDuprS1 Left
+-- rDuprK
+_ -> _ rDuprK1 Left
+* -> * rDuprK Left
+-- rDuprK1
+_ -> _ rReplacerK Left
+* -> * rDuprK1 Left
+-- rDuprI
+_ -> _ rDuprI1 Left
+* -> * rDuprI Left
+-- rDuprI1
+_ -> _ rReplacerI Left
+* -> * rDuprI1 Left
+
+-- rReplacerA
+` -> ` rReplacerA Left
+s -> ` rReplacerS Left
+k -> ` rReplacerK Left
+i -> ` rReplacerI Left
+_ -> ` rSearchrPop Left
+-- rReplacerS
+` -> s rReplacerA Left
+s -> s rReplacerS Left
+k -> s rReplacerK Left
+i -> s rReplacerI Left
+_ -> s rSearchrPop Left
+-- rReplacerK
+` -> k rReplacerA Left
+s -> k rReplacerS Left
+k -> k rReplacerK Left
+i -> k rReplacerI Left
+_ -> k rSearchrPop Left
+-- rReplacerI
+` -> i rReplacerA Left
+s -> i rReplacerS Left
+k -> i rReplacerK Left
+i -> i rReplacerI Left
+_ -> i rSearchrPop Left
+-- rSearchrPop
+* -> _ rSearch@ Left
+-- rSearch@
+* -> @ rSearchrDup Right
+
+-- rSearchrDup
+' -> ` rNextrDup Right
+S -> s rNextrDup Right
+K -> k rNextrDup Right
+I -> i rNextrDup Right
+* -> * rSearchrDup Right
+
+-- rAddrA
+_ -> _ rAddrA1 Left
+* -> * rAddrA Left
+-- rAddrA1
+_ -> ` rAdd2rA Left
+* -> * rAddrA1 Left
+-- rAdd2rA
+@ -> _ rNext@ Left
+* -> * rAdd2rA Left
+-- rNext@
+_ -> @ rRep1 Right
+-- rRep1
+_ -> _ rRep2 Right
+-- rRep2
+_ -> ` rAprA Right
+
+-- rStackrS
+@ -> s rPut_ Left
+* -> * rStackrS Left
+-- rStackrK
+@ -> k rPut_ Left
+* -> * rStackrK Left
+-- rStackrI
+@ -> i rPut_ Left
+* -> * rStackrI Left
+
+-- rPut_
+_ -> _ rPut@ Left
+
+-- rPut@
+_ -> @ rDone Right
+
+-- rApply
+@ -> @ rAp1 Right
+* -> * rApply Left
+
+-- rAp1
+_ -> _ rAprA Right
+* -> * rAp1 Right
+
+-- rAprA
+_ -> ` rDone Right
+` -> ` rAprA Right
+s -> ` rAprS Right
+k -> ` rAprK Right
+i -> ` rAprI Right
+-- rAprS
+_ -> s rDone Right
+` -> s rAprA Right
+s -> s rAprS Right
+k -> s rAprK Right
+i -> s rAprI Right
+-- rAprK
+_ -> k rDone Right
+` -> k rAprA Right
+s -> k rAprS Right
+k -> k rAprK Right
+i -> k rAprI Right
+-- rAprI
+_ -> i rDone Right
+` -> i rAprA Right
+s -> i rAprS Right
+k -> i rAprK Right
+i -> i rAprI Right
+
+-- rDone
+$ -> $ rRun Right
+* -> * rDone Right
+
+-- rRestart
+. -> _ rRestart Left
+@ -> _ rReflect Right
+* -> * rRestart Left
+
+-- rReflect
+$ -> $ rRefl@ Right
+* -> * rReflect Right
+-- rRefl@
 _ -> @ Start Left
 
 Write
-```s`k``sii``s``s`ksk`k``sii`k`sk
+```s`k``sii``s``s`ksk`k``sii`ks
