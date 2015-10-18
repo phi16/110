@@ -1,0 +1,1 @@
+ghc tmRun -O2 -threaded
