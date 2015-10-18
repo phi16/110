@@ -1,0 +1,1381 @@
+{````s`k`siks[k]} Write
+{````s`k`siksk[ ]} Write1
+{````s`k`siksk$[ ]} Write2
+{````s`k`siksk[$]@} Start
+{````s`k`siks[k]$@} Start
+{````s`k`sik[s]k$@} MarkK1
+{````s`k`siks[k]$@} Delay
+{````s`k`sik[s]k$@} Start
+{````s`k`si[k]sk$@} MarkS1
+{````s`k`sik[s]k$@} Delay
+{````s`k`si[k]sk$@} Start
+{````s`k`s[i]ksk$@} MarkK1
+{````s`k`si[k]sk$@} Delay
+{````s`k`s[i]ksk$@} Start
+{````s`k`[s]iksk$@} MarkI1
+{````s`k`s[i]ksk$@} Delay
+{````s`k`[s]iksk$@} Start
+{````s`k[`]siksk$@} MarkS1
+{````s`[k]`siksk$@} MarkS2
+{````s`k[`]siksk$@} Delay
+{````s`[k]`siksk$@} Start
+{````s[`]k`siksk$@} MarkK1
+{````[s]`k`siksk$@} MarkK2
+{````s[`]k`siksk$@} Delay
+{````[s]`k`siksk$@} Start
+{```[`]s`k`siksk$@} MarkS1
+{``[`]`s`k`siksk$@} MarkS2
+{`[`]``s`k`siksk$@} MarkS3
+{``[`]`s`k`siksk$@} MarkS
+{```[`]s`k`siksk$@} MarkS
+{````[s]`k`siksk$@} MarkS
+{```[`]S`k`siksk$@} Start
+{``[`]`S`k`siksk$@} Start
+{`[`]``S`k`siksk$@} Start
+{[`]```S`k`siksk$@} Start
+{[ ]````S`k`siksk$@} Start
+{ [`]```S`k`siksk$@} Roll
+{ `[`]``S`k`siksk$@} Roll
+{ ``[`]`S`k`siksk$@} Roll
+{ ```[`]S`k`siksk$@} Roll
+{ ````[S]`k`siksk$@} Roll
+{ ````S[`]k`siksk$@} Back
+{ ````S`[k]`siksk$@} Back
+{ ````S`k[`]siksk$@} Back
+{ ````S`k`[s]iksk$@} Back
+{ ````S`k`s[i]ksk$@} Back
+{ ````S`k`si[k]sk$@} Back
+{ ````S`k`sik[s]k$@} Back
+{ ````S`k`siks[k]$@} Back
+{ ````S`k`siksk[$]@} Back
+{ ````S`k`siks[k]$@} Run
+{ ````S`k`siks.[$]@} StackK
+{ ````S`k`siks.$[@]} StackK
+{ ````S`k`siks.$k[ ]} Put_
+{ ````S`k`siks.$k [ ]} Put@
+{ ````S`k`siks.$k[ ]@} Done
+{ ````S`k`siks.$[k] @} Done
+{ ````S`k`siks.[$]k @} Done
+{ ````S`k`siks[.]$k @} Run
+{ ````S`k`sik[s].$k @} Run
+{ ````S`k`sik.[.]$k @} StackS
+{ ````S`k`sik..[$]k @} StackS
+{ ````S`k`sik..$[k] @} StackS
+{ ````S`k`sik..$k[ ]@} StackS
+{ ````S`k`sik..$k [@]} StackS
+{ ````S`k`sik..$k s[ ]} Put_
+{ ````S`k`sik..$k s [ ]} Put@
+{ ````S`k`sik..$k s[ ]@} Done
+{ ````S`k`sik..$k [s] @} Done
+{ ````S`k`sik..$k[ ]s @} Done
+{ ````S`k`sik..$[k] s @} Done
+{ ````S`k`sik..[$]k s @} Done
+{ ````S`k`sik.[.]$k s @} Run
+{ ````S`k`sik[.].$k s @} Run
+{ ````S`k`si[k]..$k s @} Run
+{ ````S`k`si.[.].$k s @} StackK
+{ ````S`k`si..[.]$k s @} StackK
+{ ````S`k`si...[$]k s @} StackK
+{ ````S`k`si...$[k] s @} StackK
+{ ````S`k`si...$k[ ]s @} StackK
+{ ````S`k`si...$k [s] @} StackK
+{ ````S`k`si...$k s[ ]@} StackK
+{ ````S`k`si...$k s [@]} StackK
+{ ````S`k`si...$k s k[ ]} Put_
+{ ````S`k`si...$k s k [ ]} Put@
+{ ````S`k`si...$k s k[ ]@} Done
+{ ````S`k`si...$k s [k] @} Done
+{ ````S`k`si...$k s[ ]k @} Done
+{ ````S`k`si...$k [s] k @} Done
+{ ````S`k`si...$k[ ]s k @} Done
+{ ````S`k`si...$[k] s k @} Done
+{ ````S`k`si...[$]k s k @} Done
+{ ````S`k`si..[.]$k s k @} Run
+{ ````S`k`si.[.].$k s k @} Run
+{ ````S`k`si[.]..$k s k @} Run
+{ ````S`k`s[i]...$k s k @} Run
+{ ````S`k`s.[.]..$k s k @} StackI
+{ ````S`k`s..[.].$k s k @} StackI
+{ ````S`k`s...[.]$k s k @} StackI
+{ ````S`k`s....[$]k s k @} StackI
+{ ````S`k`s....$[k] s k @} StackI
+{ ````S`k`s....$k[ ]s k @} StackI
+{ ````S`k`s....$k [s] k @} StackI
+{ ````S`k`s....$k s[ ]k @} StackI
+{ ````S`k`s....$k s [k] @} StackI
+{ ````S`k`s....$k s k[ ]@} StackI
+{ ````S`k`s....$k s k [@]} StackI
+{ ````S`k`s....$k s k i[ ]} Put_
+{ ````S`k`s....$k s k i [ ]} Put@
+{ ````S`k`s....$k s k i[ ]@} Done
+{ ````S`k`s....$k s k [i] @} Done
+{ ````S`k`s....$k s k[ ]i @} Done
+{ ````S`k`s....$k s [k] i @} Done
+{ ````S`k`s....$k s[ ]k i @} Done
+{ ````S`k`s....$k [s] k i @} Done
+{ ````S`k`s....$k[ ]s k i @} Done
+{ ````S`k`s....$[k] s k i @} Done
+{ ````S`k`s....[$]k s k i @} Done
+{ ````S`k`s...[.]$k s k i @} Run
+{ ````S`k`s..[.].$k s k i @} Run
+{ ````S`k`s.[.]..$k s k i @} Run
+{ ````S`k`s[.]...$k s k i @} Run
+{ ````S`k`[s]....$k s k i @} Run
+{ ````S`k`.[.]...$k s k i @} StackS
+{ ````S`k`..[.]..$k s k i @} StackS
+{ ````S`k`...[.].$k s k i @} StackS
+{ ````S`k`....[.]$k s k i @} StackS
+{ ````S`k`.....[$]k s k i @} StackS
+{ ````S`k`.....$[k] s k i @} StackS
+{ ````S`k`.....$k[ ]s k i @} StackS
+{ ````S`k`.....$k [s] k i @} StackS
+{ ````S`k`.....$k s[ ]k i @} StackS
+{ ````S`k`.....$k s [k] i @} StackS
+{ ````S`k`.....$k s k[ ]i @} StackS
+{ ````S`k`.....$k s k [i] @} StackS
+{ ````S`k`.....$k s k i[ ]@} StackS
+{ ````S`k`.....$k s k i [@]} StackS
+{ ````S`k`.....$k s k i s[ ]} Put_
+{ ````S`k`.....$k s k i s [ ]} Put@
+{ ````S`k`.....$k s k i s[ ]@} Done
+{ ````S`k`.....$k s k i [s] @} Done
+{ ````S`k`.....$k s k i[ ]s @} Done
+{ ````S`k`.....$k s k [i] s @} Done
+{ ````S`k`.....$k s k[ ]i s @} Done
+{ ````S`k`.....$k s [k] i s @} Done
+{ ````S`k`.....$k s[ ]k i s @} Done
+{ ````S`k`.....$k [s] k i s @} Done
+{ ````S`k`.....$k[ ]s k i s @} Done
+{ ````S`k`.....$[k] s k i s @} Done
+{ ````S`k`.....[$]k s k i s @} Done
+{ ````S`k`....[.]$k s k i s @} Run
+{ ````S`k`...[.].$k s k i s @} Run
+{ ````S`k`..[.]..$k s k i s @} Run
+{ ````S`k`.[.]...$k s k i s @} Run
+{ ````S`k`[.]....$k s k i s @} Run
+{ ````S`k[`].....$k s k i s @} Run
+{ ````S`k.[.]....$k s k i s @} Apply
+{ ````S`k..[.]...$k s k i s @} Apply
+{ ````S`k...[.]..$k s k i s @} Apply
+{ ````S`k....[.].$k s k i s @} Apply
+{ ````S`k.....[.]$k s k i s @} Apply
+{ ````S`k......[$]k s k i s @} Apply
+{ ````S`k......$[k] s k i s @} Apply
+{ ````S`k......$k[ ]s k i s @} Apply
+{ ````S`k......$k [s] k i s @} Apply
+{ ````S`k......$k s[ ]k i s @} Apply
+{ ````S`k......$k s [k] i s @} Apply
+{ ````S`k......$k s k[ ]i s @} Apply
+{ ````S`k......$k s k [i] s @} Apply
+{ ````S`k......$k s k i[ ]s @} Apply
+{ ````S`k......$k s k i [s] @} Apply
+{ ````S`k......$k s k i s[ ]@} Apply
+{ ````S`k......$k s k i s [@]} Apply
+{ ````S`k......$k s k i s[ ]@} Ap1
+{ ````S`k......$k s k i [s] @} ApA
+{ ````S`k......$k s k i[ ]` @} ApS
+{ ````S`k......$k s k [i]s` @} Done
+{ ````S`k......$k s k[ ]is` @} Done
+{ ````S`k......$k s [k] is` @} Done
+{ ````S`k......$k s[ ]k is` @} Done
+{ ````S`k......$k [s] k is` @} Done
+{ ````S`k......$k[ ]s k is` @} Done
+{ ````S`k......$[k] s k is` @} Done
+{ ````S`k......[$]k s k is` @} Done
+{ ````S`k.....[.]$k s k is` @} Run
+{ ````S`k....[.].$k s k is` @} Run
+{ ````S`k...[.]..$k s k is` @} Run
+{ ````S`k..[.]...$k s k is` @} Run
+{ ````S`k.[.]....$k s k is` @} Run
+{ ````S`k[.].....$k s k is` @} Run
+{ ````S`[k]......$k s k is` @} Run
+{ ````S`.[.].....$k s k is` @} StackK
+{ ````S`..[.]....$k s k is` @} StackK
+{ ````S`...[.]...$k s k is` @} StackK
+{ ````S`....[.]..$k s k is` @} StackK
+{ ````S`.....[.].$k s k is` @} StackK
+{ ````S`......[.]$k s k is` @} StackK
+{ ````S`.......[$]k s k is` @} StackK
+{ ````S`.......$[k] s k is` @} StackK
+{ ````S`.......$k[ ]s k is` @} StackK
+{ ````S`.......$k [s] k is` @} StackK
+{ ````S`.......$k s[ ]k is` @} StackK
+{ ````S`.......$k s [k] is` @} StackK
+{ ````S`.......$k s k[ ]is` @} StackK
+{ ````S`.......$k s k [i]s` @} StackK
+{ ````S`.......$k s k i[s]` @} StackK
+{ ````S`.......$k s k is[`] @} StackK
+{ ````S`.......$k s k is`[ ]@} StackK
+{ ````S`.......$k s k is` [@]} StackK
+{ ````S`.......$k s k is` k[ ]} Put_
+{ ````S`.......$k s k is` k [ ]} Put@
+{ ````S`.......$k s k is` k[ ]@} Done
+{ ````S`.......$k s k is` [k] @} Done
+{ ````S`.......$k s k is`[ ]k @} Done
+{ ````S`.......$k s k is[`] k @} Done
+{ ````S`.......$k s k i[s]` k @} Done
+{ ````S`.......$k s k [i]s` k @} Done
+{ ````S`.......$k s k[ ]is` k @} Done
+{ ````S`.......$k s [k] is` k @} Done
+{ ````S`.......$k s[ ]k is` k @} Done
+{ ````S`.......$k [s] k is` k @} Done
+{ ````S`.......$k[ ]s k is` k @} Done
+{ ````S`.......$[k] s k is` k @} Done
+{ ````S`.......[$]k s k is` k @} Done
+{ ````S`......[.]$k s k is` k @} Run
+{ ````S`.....[.].$k s k is` k @} Run
+{ ````S`....[.]..$k s k is` k @} Run
+{ ````S`...[.]...$k s k is` k @} Run
+{ ````S`..[.]....$k s k is` k @} Run
+{ ````S`.[.].....$k s k is` k @} Run
+{ ````S`[.]......$k s k is` k @} Run
+{ ````S[`].......$k s k is` k @} Run
+{ ````S.[.]......$k s k is` k @} Apply
+{ ````S..[.].....$k s k is` k @} Apply
+{ ````S...[.]....$k s k is` k @} Apply
+{ ````S....[.]...$k s k is` k @} Apply
+{ ````S.....[.]..$k s k is` k @} Apply
+{ ````S......[.].$k s k is` k @} Apply
+{ ````S.......[.]$k s k is` k @} Apply
+{ ````S........[$]k s k is` k @} Apply
+{ ````S........$[k] s k is` k @} Apply
+{ ````S........$k[ ]s k is` k @} Apply
+{ ````S........$k [s] k is` k @} Apply
+{ ````S........$k s[ ]k is` k @} Apply
+{ ````S........$k s [k] is` k @} Apply
+{ ````S........$k s k[ ]is` k @} Apply
+{ ````S........$k s k [i]s` k @} Apply
+{ ````S........$k s k i[s]` k @} Apply
+{ ````S........$k s k is[`] k @} Apply
+{ ````S........$k s k is`[ ]k @} Apply
+{ ````S........$k s k is` [k] @} Apply
+{ ````S........$k s k is` k[ ]@} Apply
+{ ````S........$k s k is` k [@]} Apply
+{ ````S........$k s k is` k[ ]@} Ap1
+{ ````S........$k s k is` [k] @} ApA
+{ ````S........$k s k is`[ ]` @} ApK
+{ ````S........$k s k is[`]k` @} Done
+{ ````S........$k s k i[s]`k` @} Done
+{ ````S........$k s k [i]s`k` @} Done
+{ ````S........$k s k[ ]is`k` @} Done
+{ ````S........$k s [k] is`k` @} Done
+{ ````S........$k s[ ]k is`k` @} Done
+{ ````S........$k [s] k is`k` @} Done
+{ ````S........$k[ ]s k is`k` @} Done
+{ ````S........$[k] s k is`k` @} Done
+{ ````S........[$]k s k is`k` @} Done
+{ ````S.......[.]$k s k is`k` @} Run
+{ ````S......[.].$k s k is`k` @} Run
+{ ````S.....[.]..$k s k is`k` @} Run
+{ ````S....[.]...$k s k is`k` @} Run
+{ ````S...[.]....$k s k is`k` @} Run
+{ ````S..[.].....$k s k is`k` @} Run
+{ ````S.[.]......$k s k is`k` @} Run
+{ ````S[.].......$k s k is`k` @} Run
+{ ````[S]........$k s k is`k` @} Run
+{ ```[`].........$k s k is`k` @} SearchS1
+{ ``[`]..........$k s k is`k` @} SearchS2
+{ `[`]...........$k s k is`k` @} SearchS3
+{ `.[.]..........$k s k is`k` @} ProcS
+{ `..[.].........$k s k is`k` @} ProcS
+{ `...[.]........$k s k is`k` @} ProcS
+{ `....[.].......$k s k is`k` @} ProcS
+{ `.....[.]......$k s k is`k` @} ProcS
+{ `......[.].....$k s k is`k` @} ProcS
+{ `.......[.]....$k s k is`k` @} ProcS
+{ `........[.]...$k s k is`k` @} ProcS
+{ `.........[.]..$k s k is`k` @} ProcS
+{ `..........[.].$k s k is`k` @} ProcS
+{ `...........[.]$k s k is`k` @} ProcS
+{ `............[$]k s k is`k` @} ProcS
+{ `............$[k] s k is`k` @} ProcS
+{ `............$k[ ]s k is`k` @} ProcS
+{ `............$k [s] k is`k` @} ProcS
+{ `............$k s[ ]k is`k` @} ProcS
+{ `............$k s [k] is`k` @} ProcS
+{ `............$k s k[ ]is`k` @} ProcS
+{ `............$k s k [i]s`k` @} ProcS
+{ `............$k s k i[s]`k` @} ProcS
+{ `............$k s k is[`]k` @} ProcS
+{ `............$k s k is`[k]` @} ProcS
+{ `............$k s k is`k[`] @} ProcS
+{ `............$k s k is`k`[ ]@} ProcS
+{ `............$k s k is`k` [@]} ProcS
+{ `............$k s k is`k`[ ]@} ProcS1
+{ `............$k s k is`k[`] @} ProcS2
+{ `............$k s k is`[k]` @} ProcS2
+{ `............$k s k is[`]k` @} ProcS2
+{ `............$k s k i[s]`k` @} ProcS2
+{ `............$k s k [i]s`k` @} ProcS2
+{ `............$k s k[ ]is`k` @} ProcS2
+{ `............$k s [k] is`k` @} ProcS3
+{ `............$k s[ ]k is`k` @} ProcS3
+{ `............$k [s] k is`k` @} NextDup
+{ `............$k S[ ]k is`k` @} DupS
+{ `............$k S [k] is`k` @} DupS1
+{ `............$k S k[ ]is`k` @} DupS1
+{ `............$k S k [i]s`k` @} ReplaceS
+{ `............$k S k s[s]`k` @} ReplaceI
+{ `............$k S k si[`]k` @} ReplaceS
+{ `............$k S k sis[k]` @} ReplaceA
+{ `............$k S k sis`[`] @} ReplaceK
+{ `............$k S k sis`k[ ]@} ReplaceA
+{ `............$k S k sis`k`[@]} SearchPop
+{ `............$k S k sis`k` [ ]} Search@
+{ `............$k S k sis`k`[ ]@} SearchDup
+{ `............$k S k sis`k[`] @} SearchDup
+{ `............$k S k sis`[k]` @} SearchDup
+{ `............$k S k sis[`]k` @} SearchDup
+{ `............$k S k si[s]`k` @} SearchDup
+{ `............$k S k s[i]s`k` @} SearchDup
+{ `............$k S k [s]is`k` @} SearchDup
+{ `............$k S k[ ]sis`k` @} SearchDup
+{ `............$k S [k] sis`k` @} SearchDup
+{ `............$k S[ ]k sis`k` @} SearchDup
+{ `............$k [S] k sis`k` @} SearchDup
+{ `............$k[ ]s k sis`k` @} NextDup
+{ `............$k [s] k sis`k` @} AddA
+{ `............$k s[ ]k sis`k` @} AddA
+{ `............$k s [k] sis`k` @} AddA1
+{ `............$k s k[ ]sis`k` @} AddA1
+{ `............$k s k`[s]is`k` @} Add2A
+{ `............$k s k`s[i]s`k` @} Add2A
+{ `............$k s k`si[s]`k` @} Add2A
+{ `............$k s k`sis[`]k` @} Add2A
+{ `............$k s k`sis`[k]` @} Add2A
+{ `............$k s k`sis`k[`] @} Add2A
+{ `............$k s k`sis`k`[ ]@} Add2A
+{ `............$k s k`sis`k` [@]} Add2A
+{ `............$k s k`sis`k`  [ ]} Next@
+{ `............$k s k`sis`k` [ ]@} Rep1
+{ `............$k s k`sis`k`[ ] @} Rep2
+{ `............$k s k`sis`k[`]` @} ApA
+{ `............$k s k`sis`[k]`` @} ApA
+{ `............$k s k`sis[`]``` @} ApK
+{ `............$k s k`si[s]k``` @} ApA
+{ `............$k s k`s[i]`k``` @} ApS
+{ `............$k s k`[s]s`k``` @} ApI
+{ `............$k s k[`]is`k``` @} ApS
+{ `............$k s [k]sis`k``` @} ApA
+{ `............$k s[ ]`sis`k``` @} ApK
+{ `............$k [s]k`sis`k``` @} Done
+{ `............$k[ ]sk`sis`k``` @} Done
+{ `............$[k] sk`sis`k``` @} Done
+{ `............[$]k sk`sis`k``` @} Done
+{ `...........[.]$k sk`sis`k``` @} Run
+{ `..........[.].$k sk`sis`k``` @} Run
+{ `.........[.]..$k sk`sis`k``` @} Run
+{ `........[.]...$k sk`sis`k``` @} Run
+{ `.......[.]....$k sk`sis`k``` @} Run
+{ `......[.].....$k sk`sis`k``` @} Run
+{ `.....[.]......$k sk`sis`k``` @} Run
+{ `....[.].......$k sk`sis`k``` @} Run
+{ `...[.]........$k sk`sis`k``` @} Run
+{ `..[.].........$k sk`sis`k``` @} Run
+{ `.[.]..........$k sk`sis`k``` @} Run
+{ `[.]...........$k sk`sis`k``` @} Run
+{ [`]............$k sk`sis`k``` @} Run
+{ .[.]...........$k sk`sis`k``` @} Apply
+{ ..[.]..........$k sk`sis`k``` @} Apply
+{ ...[.].........$k sk`sis`k``` @} Apply
+{ ....[.]........$k sk`sis`k``` @} Apply
+{ .....[.].......$k sk`sis`k``` @} Apply
+{ ......[.]......$k sk`sis`k``` @} Apply
+{ .......[.].....$k sk`sis`k``` @} Apply
+{ ........[.]....$k sk`sis`k``` @} Apply
+{ .........[.]...$k sk`sis`k``` @} Apply
+{ ..........[.]..$k sk`sis`k``` @} Apply
+{ ...........[.].$k sk`sis`k``` @} Apply
+{ ............[.]$k sk`sis`k``` @} Apply
+{ .............[$]k sk`sis`k``` @} Apply
+{ .............$[k] sk`sis`k``` @} Apply
+{ .............$k[ ]sk`sis`k``` @} Apply
+{ .............$k [s]k`sis`k``` @} Apply
+{ .............$k s[k]`sis`k``` @} Apply
+{ .............$k sk[`]sis`k``` @} Apply
+{ .............$k sk`[s]is`k``` @} Apply
+{ .............$k sk`s[i]s`k``` @} Apply
+{ .............$k sk`si[s]`k``` @} Apply
+{ .............$k sk`sis[`]k``` @} Apply
+{ .............$k sk`sis`[k]``` @} Apply
+{ .............$k sk`sis`k[`]`` @} Apply
+{ .............$k sk`sis`k`[`]` @} Apply
+{ .............$k sk`sis`k``[`] @} Apply
+{ .............$k sk`sis`k```[ ]@} Apply
+{ .............$k sk`sis`k``` [@]} Apply
+{ .............$k sk`sis`k```[ ]@} Ap1
+{ .............$k sk`sis`k``[`] @} ApA
+{ .............$k sk`sis`k`[`]` @} ApA
+{ .............$k sk`sis`k[`]`` @} ApA
+{ .............$k sk`sis`[k]``` @} ApA
+{ .............$k sk`sis[`]```` @} ApK
+{ .............$k sk`si[s]k```` @} ApA
+{ .............$k sk`s[i]`k```` @} ApS
+{ .............$k sk`[s]s`k```` @} ApI
+{ .............$k sk[`]is`k```` @} ApS
+{ .............$k s[k]sis`k```` @} ApA
+{ .............$k [s]`sis`k```` @} ApK
+{ .............$k[ ]k`sis`k```` @} ApS
+{ .............$[k]sk`sis`k```` @} Done
+{ .............[$]ksk`sis`k```` @} Done
+{ ............[.]$ksk`sis`k```` @} Run
+{ ...........[.].$ksk`sis`k```` @} Run
+{ ..........[.]..$ksk`sis`k```` @} Run
+{ .........[.]...$ksk`sis`k```` @} Run
+{ ........[.]....$ksk`sis`k```` @} Run
+{ .......[.].....$ksk`sis`k```` @} Run
+{ ......[.]......$ksk`sis`k```` @} Run
+{ .....[.].......$ksk`sis`k```` @} Run
+{ ....[.]........$ksk`sis`k```` @} Run
+{ ...[.].........$ksk`sis`k```` @} Run
+{ ..[.]..........$ksk`sis`k```` @} Run
+{ .[.]...........$ksk`sis`k```` @} Run
+{ [.]............$ksk`sis`k```` @} Run
+{[ ].............$ksk`sis`k```` @} Run
+{ [.]............$ksk`sis`k```` @} Restart
+{  [.]...........$ksk`sis`k```` @} Restart
+{   [.]..........$ksk`sis`k```` @} Restart
+{    [.].........$ksk`sis`k```` @} Restart
+{     [.]........$ksk`sis`k```` @} Restart
+{      [.].......$ksk`sis`k```` @} Restart
+{       [.]......$ksk`sis`k```` @} Restart
+{        [.].....$ksk`sis`k```` @} Restart
+{         [.]....$ksk`sis`k```` @} Restart
+{          [.]...$ksk`sis`k```` @} Restart
+{           [.]..$ksk`sis`k```` @} Restart
+{            [.].$ksk`sis`k```` @} Restart
+{             [.]$ksk`sis`k```` @} Restart
+{              [$]ksk`sis`k```` @} Restart
+{              $[k]sk`sis`k```` @} Restart
+{              $k[s]k`sis`k```` @} Restart
+{              $ks[k]`sis`k```` @} Restart
+{              $ksk[`]sis`k```` @} Restart
+{              $ksk`[s]is`k```` @} Restart
+{              $ksk`s[i]s`k```` @} Restart
+{              $ksk`si[s]`k```` @} Restart
+{              $ksk`sis[`]k```` @} Restart
+{              $ksk`sis`[k]```` @} Restart
+{              $ksk`sis`k[`]``` @} Restart
+{              $ksk`sis`k`[`]`` @} Restart
+{              $ksk`sis`k``[`]` @} Restart
+{              $ksk`sis`k```[`] @} Restart
+{              $ksk`sis`k````[ ]@} Restart
+{              $ksk`sis`k```` [@]} Restart
+{              $ksk`sis`k````[ ] } Reflect
+{              $ksk`sis`k```[`]  } Reflect
+{              $ksk`sis`k``[`]`  } Reflect
+{              $ksk`sis`k`[`]``  } Reflect
+{              $ksk`sis`k[`]```  } Reflect
+{              $ksk`sis`[k]````  } Reflect
+{              $ksk`sis[`]k````  } Reflect
+{              $ksk`si[s]`k````  } Reflect
+{              $ksk`s[i]s`k````  } Reflect
+{              $ksk`[s]is`k````  } Reflect
+{              $ksk[`]sis`k````  } Reflect
+{              $ks[k]`sis`k````  } Reflect
+{              $k[s]k`sis`k````  } Reflect
+{              $[k]sk`sis`k````  } Reflect
+{              [$]ksk`sis`k````  } Reflect
+{             [ ]$ksk`sis`k````  } Refl@
+{             @[$]ksk`sis`k````  } rStart
+{             @$[k]sk`sis`k````  } rStart
+{             @$k[s]k`sis`k````  } rMarkK1
+{             @$[k]sk`sis`k````  } rDelay
+{             @$k[s]k`sis`k````  } rStart
+{             @$ks[k]`sis`k````  } rMarkS1
+{             @$k[s]k`sis`k````  } rDelay
+{             @$ks[k]`sis`k````  } rStart
+{             @$ksk[`]sis`k````  } rMarkK1
+{             @$ksk`[s]is`k````  } rMarkK2
+{             @$ksk[`]sis`k````  } rDelay
+{             @$ksk`[s]is`k````  } rStart
+{             @$ksk`s[i]s`k````  } rMarkS1
+{             @$ksk`[s]is`k````  } rDelay
+{             @$ksk`s[i]s`k````  } rStart
+{             @$ksk`si[s]`k````  } rMarkI1
+{             @$ksk`s[i]s`k````  } rDelay
+{             @$ksk`si[s]`k````  } rStart
+{             @$ksk`sis[`]k````  } rMarkS1
+{             @$ksk`sis`[k]````  } rMarkS2
+{             @$ksk`sis[`]k````  } rDelay
+{             @$ksk`sis`[k]````  } rStart
+{             @$ksk`sis`k[`]```  } rMarkK1
+{             @$ksk`sis`k`[`]``  } rMarkK2
+{             @$ksk`sis`k[`]```  } rMarkK
+{             @$ksk`sis`[k]````  } rMarkK
+{             @$ksk`sis`K[`]```  } rStart
+{             @$ksk`sis`K`[`]``  } rStart
+{             @$ksk`sis`K``[`]`  } rStart
+{             @$ksk`sis`K```[`]  } rStart
+{             @$ksk`sis`K````[ ] } rStart
+{             @$ksk`sis`K```[`]  } rRoll
+{             @$ksk`sis`K``[`]`  } rRoll
+{             @$ksk`sis`K`[`]``  } rRoll
+{             @$ksk`sis`K[`]```  } rRoll
+{             @$ksk`sis`[K]````  } rRoll
+{             @$ksk`sis[`]K````  } rRollrP
+{             @$ksk`si[s]`K````  } rRollrP
+{             @$ksk`s[i]s`K````  } rRollrP
+{             @$ksk`[s]is`K````  } rRollrP
+{             @$ksk[`]sis`K````  } rRollrP
+{             @$ks[k]`sis`K````  } rRollrP
+{             @$k[s]k`sis`K````  } rRollrP
+{             @$[k]sk`sis`K````  } rRollrP
+{             @[$]ksk`sis`K````  } rRollrP
+{             @$[k]sk`sis`K````  } rRun
+{             @[$].sk`sis`K````  } rStackK
+{             [@]$.sk`sis`K````  } rStackK
+{            [ ]k$.sk`sis`K````  } rPut_
+{           [ ] k$.sk`sis`K````  } rPut@
+{           @[ ]k$.sk`sis`K````  } rDone
+{           @ [k]$.sk`sis`K````  } rDone
+{           @ k[$].sk`sis`K````  } rDone
+{           @ k$[.]sk`sis`K````  } rRun
+{           @ k$.[s]k`sis`K````  } rRun
+{           @ k$[.].k`sis`K````  } rStackS
+{           @ k[$]..k`sis`K````  } rStackS
+{           @ [k]$..k`sis`K````  } rStackS
+{           @[ ]k$..k`sis`K````  } rStackS
+{           [@] k$..k`sis`K````  } rStackS
+{          [ ]s k$..k`sis`K````  } rPut_
+{         [ ] s k$..k`sis`K````  } rPut@
+{         @[ ]s k$..k`sis`K````  } rDone
+{         @ [s] k$..k`sis`K````  } rDone
+{         @ s[ ]k$..k`sis`K````  } rDone
+{         @ s [k]$..k`sis`K````  } rDone
+{         @ s k[$]..k`sis`K````  } rDone
+{         @ s k$[.].k`sis`K````  } rRun
+{         @ s k$.[.]k`sis`K````  } rRun
+{         @ s k$..[k]`sis`K````  } rRun
+{         @ s k$.[.].`sis`K````  } rStackK
+{         @ s k$[.]..`sis`K````  } rStackK
+{         @ s k[$]...`sis`K````  } rStackK
+{         @ s [k]$...`sis`K````  } rStackK
+{         @ s[ ]k$...`sis`K````  } rStackK
+{         @ [s] k$...`sis`K````  } rStackK
+{         @[ ]s k$...`sis`K````  } rStackK
+{         [@] s k$...`sis`K````  } rStackK
+{        [ ]k s k$...`sis`K````  } rPut_
+{       [ ] k s k$...`sis`K````  } rPut@
+{       @[ ]k s k$...`sis`K````  } rDone
+{       @ [k] s k$...`sis`K````  } rDone
+{       @ k[ ]s k$...`sis`K````  } rDone
+{       @ k [s] k$...`sis`K````  } rDone
+{       @ k s[ ]k$...`sis`K````  } rDone
+{       @ k s [k]$...`sis`K````  } rDone
+{       @ k s k[$]...`sis`K````  } rDone
+{       @ k s k$[.]..`sis`K````  } rRun
+{       @ k s k$.[.].`sis`K````  } rRun
+{       @ k s k$..[.]`sis`K````  } rRun
+{       @ k s k$...[`]sis`K````  } rRun
+{       @ k s k$..[.].sis`K````  } rApply
+{       @ k s k$.[.]..sis`K````  } rApply
+{       @ k s k$[.]...sis`K````  } rApply
+{       @ k s k[$]....sis`K````  } rApply
+{       @ k s [k]$....sis`K````  } rApply
+{       @ k s[ ]k$....sis`K````  } rApply
+{       @ k [s] k$....sis`K````  } rApply
+{       @ k[ ]s k$....sis`K````  } rApply
+{       @ [k] s k$....sis`K````  } rApply
+{       @[ ]k s k$....sis`K````  } rApply
+{       [@] k s k$....sis`K````  } rApply
+{       @[ ]k s k$....sis`K````  } rAp1
+{       @ [k] s k$....sis`K````  } rApA
+{       @ `[ ]s k$....sis`K````  } rApK
+{       @ `k[s] k$....sis`K````  } rDone
+{       @ `ks[ ]k$....sis`K````  } rDone
+{       @ `ks [k]$....sis`K````  } rDone
+{       @ `ks k[$]....sis`K````  } rDone
+{       @ `ks k$[.]...sis`K````  } rRun
+{       @ `ks k$.[.]..sis`K````  } rRun
+{       @ `ks k$..[.].sis`K````  } rRun
+{       @ `ks k$...[.]sis`K````  } rRun
+{       @ `ks k$....[s]is`K````  } rRun
+{       @ `ks k$...[.].is`K````  } rStackS
+{       @ `ks k$..[.]..is`K````  } rStackS
+{       @ `ks k$.[.]...is`K````  } rStackS
+{       @ `ks k$[.]....is`K````  } rStackS
+{       @ `ks k[$].....is`K````  } rStackS
+{       @ `ks [k]$.....is`K````  } rStackS
+{       @ `ks[ ]k$.....is`K````  } rStackS
+{       @ `k[s] k$.....is`K````  } rStackS
+{       @ `[k]s k$.....is`K````  } rStackS
+{       @ [`]ks k$.....is`K````  } rStackS
+{       @[ ]`ks k$.....is`K````  } rStackS
+{       [@] `ks k$.....is`K````  } rStackS
+{      [ ]s `ks k$.....is`K````  } rPut_
+{     [ ] s `ks k$.....is`K````  } rPut@
+{     @[ ]s `ks k$.....is`K````  } rDone
+{     @ [s] `ks k$.....is`K````  } rDone
+{     @ s[ ]`ks k$.....is`K````  } rDone
+{     @ s [`]ks k$.....is`K````  } rDone
+{     @ s `[k]s k$.....is`K````  } rDone
+{     @ s `k[s] k$.....is`K````  } rDone
+{     @ s `ks[ ]k$.....is`K````  } rDone
+{     @ s `ks [k]$.....is`K````  } rDone
+{     @ s `ks k[$].....is`K````  } rDone
+{     @ s `ks k$[.]....is`K````  } rRun
+{     @ s `ks k$.[.]...is`K````  } rRun
+{     @ s `ks k$..[.]..is`K````  } rRun
+{     @ s `ks k$...[.].is`K````  } rRun
+{     @ s `ks k$....[.]is`K````  } rRun
+{     @ s `ks k$.....[i]s`K````  } rRun
+{     @ s `ks k$....[.].s`K````  } rStackI
+{     @ s `ks k$...[.]..s`K````  } rStackI
+{     @ s `ks k$..[.]...s`K````  } rStackI
+{     @ s `ks k$.[.]....s`K````  } rStackI
+{     @ s `ks k$[.].....s`K````  } rStackI
+{     @ s `ks k[$]......s`K````  } rStackI
+{     @ s `ks [k]$......s`K````  } rStackI
+{     @ s `ks[ ]k$......s`K````  } rStackI
+{     @ s `k[s] k$......s`K````  } rStackI
+{     @ s `[k]s k$......s`K````  } rStackI
+{     @ s [`]ks k$......s`K````  } rStackI
+{     @ s[ ]`ks k$......s`K````  } rStackI
+{     @ [s] `ks k$......s`K````  } rStackI
+{     @[ ]s `ks k$......s`K````  } rStackI
+{     [@] s `ks k$......s`K````  } rStackI
+{    [ ]i s `ks k$......s`K````  } rPut_
+{   [ ] i s `ks k$......s`K````  } rPut@
+{   @[ ]i s `ks k$......s`K````  } rDone
+{   @ [i] s `ks k$......s`K````  } rDone
+{   @ i[ ]s `ks k$......s`K````  } rDone
+{   @ i [s] `ks k$......s`K````  } rDone
+{   @ i s[ ]`ks k$......s`K````  } rDone
+{   @ i s [`]ks k$......s`K````  } rDone
+{   @ i s `[k]s k$......s`K````  } rDone
+{   @ i s `k[s] k$......s`K````  } rDone
+{   @ i s `ks[ ]k$......s`K````  } rDone
+{   @ i s `ks [k]$......s`K````  } rDone
+{   @ i s `ks k[$]......s`K````  } rDone
+{   @ i s `ks k$[.].....s`K````  } rRun
+{   @ i s `ks k$.[.]....s`K````  } rRun
+{   @ i s `ks k$..[.]...s`K````  } rRun
+{   @ i s `ks k$...[.]..s`K````  } rRun
+{   @ i s `ks k$....[.].s`K````  } rRun
+{   @ i s `ks k$.....[.]s`K````  } rRun
+{   @ i s `ks k$......[s]`K````  } rRun
+{   @ i s `ks k$.....[.].`K````  } rStackS
+{   @ i s `ks k$....[.]..`K````  } rStackS
+{   @ i s `ks k$...[.]...`K````  } rStackS
+{   @ i s `ks k$..[.]....`K````  } rStackS
+{   @ i s `ks k$.[.].....`K````  } rStackS
+{   @ i s `ks k$[.]......`K````  } rStackS
+{   @ i s `ks k[$].......`K````  } rStackS
+{   @ i s `ks [k]$.......`K````  } rStackS
+{   @ i s `ks[ ]k$.......`K````  } rStackS
+{   @ i s `k[s] k$.......`K````  } rStackS
+{   @ i s `[k]s k$.......`K````  } rStackS
+{   @ i s [`]ks k$.......`K````  } rStackS
+{   @ i s[ ]`ks k$.......`K````  } rStackS
+{   @ i [s] `ks k$.......`K````  } rStackS
+{   @ i[ ]s `ks k$.......`K````  } rStackS
+{   @ [i] s `ks k$.......`K````  } rStackS
+{   @[ ]i s `ks k$.......`K````  } rStackS
+{   [@] i s `ks k$.......`K````  } rStackS
+{  [ ]s i s `ks k$.......`K````  } rPut_
+{ [ ] s i s `ks k$.......`K````  } rPut@
+{ @[ ]s i s `ks k$.......`K````  } rDone
+{ @ [s] i s `ks k$.......`K````  } rDone
+{ @ s[ ]i s `ks k$.......`K````  } rDone
+{ @ s [i] s `ks k$.......`K````  } rDone
+{ @ s i[ ]s `ks k$.......`K````  } rDone
+{ @ s i [s] `ks k$.......`K````  } rDone
+{ @ s i s[ ]`ks k$.......`K````  } rDone
+{ @ s i s [`]ks k$.......`K````  } rDone
+{ @ s i s `[k]s k$.......`K````  } rDone
+{ @ s i s `k[s] k$.......`K````  } rDone
+{ @ s i s `ks[ ]k$.......`K````  } rDone
+{ @ s i s `ks [k]$.......`K````  } rDone
+{ @ s i s `ks k[$].......`K````  } rDone
+{ @ s i s `ks k$[.]......`K````  } rRun
+{ @ s i s `ks k$.[.].....`K````  } rRun
+{ @ s i s `ks k$..[.]....`K````  } rRun
+{ @ s i s `ks k$...[.]...`K````  } rRun
+{ @ s i s `ks k$....[.]..`K````  } rRun
+{ @ s i s `ks k$.....[.].`K````  } rRun
+{ @ s i s `ks k$......[.]`K````  } rRun
+{ @ s i s `ks k$.......[`]K````  } rRun
+{ @ s i s `ks k$......[.].K````  } rApply
+{ @ s i s `ks k$.....[.]..K````  } rApply
+{ @ s i s `ks k$....[.]...K````  } rApply
+{ @ s i s `ks k$...[.]....K````  } rApply
+{ @ s i s `ks k$..[.].....K````  } rApply
+{ @ s i s `ks k$.[.]......K````  } rApply
+{ @ s i s `ks k$[.].......K````  } rApply
+{ @ s i s `ks k[$]........K````  } rApply
+{ @ s i s `ks [k]$........K````  } rApply
+{ @ s i s `ks[ ]k$........K````  } rApply
+{ @ s i s `k[s] k$........K````  } rApply
+{ @ s i s `[k]s k$........K````  } rApply
+{ @ s i s [`]ks k$........K````  } rApply
+{ @ s i s[ ]`ks k$........K````  } rApply
+{ @ s i [s] `ks k$........K````  } rApply
+{ @ s i[ ]s `ks k$........K````  } rApply
+{ @ s [i] s `ks k$........K````  } rApply
+{ @ s[ ]i s `ks k$........K````  } rApply
+{ @ [s] i s `ks k$........K````  } rApply
+{ @[ ]s i s `ks k$........K````  } rApply
+{ [@] s i s `ks k$........K````  } rApply
+{ @[ ]s i s `ks k$........K````  } rAp1
+{ @ [s] i s `ks k$........K````  } rApA
+{ @ `[ ]i s `ks k$........K````  } rApS
+{ @ `s[i] s `ks k$........K````  } rDone
+{ @ `si[ ]s `ks k$........K````  } rDone
+{ @ `si [s] `ks k$........K````  } rDone
+{ @ `si s[ ]`ks k$........K````  } rDone
+{ @ `si s [`]ks k$........K````  } rDone
+{ @ `si s `[k]s k$........K````  } rDone
+{ @ `si s `k[s] k$........K````  } rDone
+{ @ `si s `ks[ ]k$........K````  } rDone
+{ @ `si s `ks [k]$........K````  } rDone
+{ @ `si s `ks k[$]........K````  } rDone
+{ @ `si s `ks k$[.].......K````  } rRun
+{ @ `si s `ks k$.[.]......K````  } rRun
+{ @ `si s `ks k$..[.].....K````  } rRun
+{ @ `si s `ks k$...[.]....K````  } rRun
+{ @ `si s `ks k$....[.]...K````  } rRun
+{ @ `si s `ks k$.....[.]..K````  } rRun
+{ @ `si s `ks k$......[.].K````  } rRun
+{ @ `si s `ks k$.......[.]K````  } rRun
+{ @ `si s `ks k$........[K]````  } rRun
+{ @ `si s `ks k$.........[`]```  } rSearchK1
+{ @ `si s `ks k$..........[`]``  } rSearchK2
+{ @ `si s `ks k$.........[.].``  } rProcK
+{ @ `si s `ks k$........[.]..``  } rProcK
+{ @ `si s `ks k$.......[.]...``  } rProcK
+{ @ `si s `ks k$......[.]....``  } rProcK
+{ @ `si s `ks k$.....[.].....``  } rProcK
+{ @ `si s `ks k$....[.]......``  } rProcK
+{ @ `si s `ks k$...[.].......``  } rProcK
+{ @ `si s `ks k$..[.]........``  } rProcK
+{ @ `si s `ks k$.[.].........``  } rProcK
+{ @ `si s `ks k$[.]..........``  } rProcK
+{ @ `si s `ks k[$]...........``  } rProcK
+{ @ `si s `ks [k]$...........``  } rProcK
+{ @ `si s `ks[ ]k$...........``  } rProcK
+{ @ `si s `k[s] k$...........``  } rProcK
+{ @ `si s `[k]s k$...........``  } rProcK
+{ @ `si s [`]ks k$...........``  } rProcK
+{ @ `si s[ ]`ks k$...........``  } rProcK
+{ @ `si [s] `ks k$...........``  } rProcK
+{ @ `si[ ]s `ks k$...........``  } rProcK
+{ @ `s[i] s `ks k$...........``  } rProcK
+{ @ `[s]i s `ks k$...........``  } rProcK
+{ @ [`]si s `ks k$...........``  } rProcK
+{ @[ ]`si s `ks k$...........``  } rProcK
+{ [@] `si s `ks k$...........``  } rProcK
+{  [ ]`si s `ks k$...........``  } rLeftK
+{  @[`]si s `ks k$...........``  } rLeftK1
+{  @`[s]i s `ks k$...........``  } rLeftK1
+{  @`s[i] s `ks k$...........``  } rLeftK1
+{  @`si[ ]s `ks k$...........``  } rLeftK1
+{  @`si [s] `ks k$...........``  } rLeftK2
+{  @`si s[ ]`ks k$...........``  } rLeftK2
+{  @`si [s] `ks k$...........``  } rPosK
+{  @`si[ ]^ `ks k$...........``  } rDelK
+{  @`s[i] ^ `ks k$...........``  } rCopy
+{  @`s [ ]^ `ks k$...........``  } rCopyI
+{  @`s  [^] `ks k$...........``  } rCopyI
+{  @`s [ ]i `ks k$...........``  } rStubK
+{  @`s[ ]^i `ks k$...........``  } rCopy
+{  @`[s] ^i `ks k$...........``  } rCopy
+{  @` [ ]^i `ks k$...........``  } rCopyS
+{  @`  [^]i `ks k$...........``  } rCopyS
+{  @` [ ]si `ks k$...........``  } rStubK
+{  @`[ ]^si `ks k$...........``  } rCopy
+{  @[`] ^si `ks k$...........``  } rCopy
+{  @ [ ]^si `ks k$...........``  } rCopyA
+{  @  [^]si `ks k$...........``  } rCopyA
+{  @ [ ]`si `ks k$...........``  } rStubK
+{  @[ ]^`si `ks k$...........``  } rCopy
+{  [@] ^`si `ks k$...........``  } rCopy
+{   [ ]^`si `ks k$...........``  } rEndK
+{    [^]`si `ks k$...........``  } rEndK
+{   [ ] `si `ks k$...........``  } rPut@
+{   @[ ]`si `ks k$...........``  } rDone
+{   @ [`]si `ks k$...........``  } rDone
+{   @ `[s]i `ks k$...........``  } rDone
+{   @ `s[i] `ks k$...........``  } rDone
+{   @ `si[ ]`ks k$...........``  } rDone
+{   @ `si [`]ks k$...........``  } rDone
+{   @ `si `[k]s k$...........``  } rDone
+{   @ `si `k[s] k$...........``  } rDone
+{   @ `si `ks[ ]k$...........``  } rDone
+{   @ `si `ks [k]$...........``  } rDone
+{   @ `si `ks k[$]...........``  } rDone
+{   @ `si `ks k$[.]..........``  } rRun
+{   @ `si `ks k$.[.].........``  } rRun
+{   @ `si `ks k$..[.]........``  } rRun
+{   @ `si `ks k$...[.].......``  } rRun
+{   @ `si `ks k$....[.]......``  } rRun
+{   @ `si `ks k$.....[.].....``  } rRun
+{   @ `si `ks k$......[.]....``  } rRun
+{   @ `si `ks k$.......[.]...``  } rRun
+{   @ `si `ks k$........[.]..``  } rRun
+{   @ `si `ks k$.........[.].``  } rRun
+{   @ `si `ks k$..........[.]``  } rRun
+{   @ `si `ks k$...........[`]`  } rRun
+{   @ `si `ks k$..........[.].`  } rApply
+{   @ `si `ks k$.........[.]..`  } rApply
+{   @ `si `ks k$........[.]...`  } rApply
+{   @ `si `ks k$.......[.]....`  } rApply
+{   @ `si `ks k$......[.].....`  } rApply
+{   @ `si `ks k$.....[.]......`  } rApply
+{   @ `si `ks k$....[.].......`  } rApply
+{   @ `si `ks k$...[.]........`  } rApply
+{   @ `si `ks k$..[.].........`  } rApply
+{   @ `si `ks k$.[.]..........`  } rApply
+{   @ `si `ks k$[.]...........`  } rApply
+{   @ `si `ks k[$]............`  } rApply
+{   @ `si `ks [k]$............`  } rApply
+{   @ `si `ks[ ]k$............`  } rApply
+{   @ `si `k[s] k$............`  } rApply
+{   @ `si `[k]s k$............`  } rApply
+{   @ `si [`]ks k$............`  } rApply
+{   @ `si[ ]`ks k$............`  } rApply
+{   @ `s[i] `ks k$............`  } rApply
+{   @ `[s]i `ks k$............`  } rApply
+{   @ [`]si `ks k$............`  } rApply
+{   @[ ]`si `ks k$............`  } rApply
+{   [@] `si `ks k$............`  } rApply
+{   @[ ]`si `ks k$............`  } rAp1
+{   @ [`]si `ks k$............`  } rApA
+{   @ `[s]i `ks k$............`  } rApA
+{   @ ``[i] `ks k$............`  } rApS
+{   @ ``s[ ]`ks k$............`  } rApI
+{   @ ``si[`]ks k$............`  } rDone
+{   @ ``si`[k]s k$............`  } rDone
+{   @ ``si`k[s] k$............`  } rDone
+{   @ ``si`ks[ ]k$............`  } rDone
+{   @ ``si`ks [k]$............`  } rDone
+{   @ ``si`ks k[$]............`  } rDone
+{   @ ``si`ks k$[.]...........`  } rRun
+{   @ ``si`ks k$.[.]..........`  } rRun
+{   @ ``si`ks k$..[.].........`  } rRun
+{   @ ``si`ks k$...[.]........`  } rRun
+{   @ ``si`ks k$....[.].......`  } rRun
+{   @ ``si`ks k$.....[.]......`  } rRun
+{   @ ``si`ks k$......[.].....`  } rRun
+{   @ ``si`ks k$.......[.]....`  } rRun
+{   @ ``si`ks k$........[.]...`  } rRun
+{   @ ``si`ks k$.........[.]..`  } rRun
+{   @ ``si`ks k$..........[.].`  } rRun
+{   @ ``si`ks k$...........[.]`  } rRun
+{   @ ``si`ks k$............[`]  } rRun
+{   @ ``si`ks k$...........[.].  } rApply
+{   @ ``si`ks k$..........[.]..  } rApply
+{   @ ``si`ks k$.........[.]...  } rApply
+{   @ ``si`ks k$........[.]....  } rApply
+{   @ ``si`ks k$.......[.].....  } rApply
+{   @ ``si`ks k$......[.]......  } rApply
+{   @ ``si`ks k$.....[.].......  } rApply
+{   @ ``si`ks k$....[.]........  } rApply
+{   @ ``si`ks k$...[.].........  } rApply
+{   @ ``si`ks k$..[.]..........  } rApply
+{   @ ``si`ks k$.[.]...........  } rApply
+{   @ ``si`ks k$[.]............  } rApply
+{   @ ``si`ks k[$].............  } rApply
+{   @ ``si`ks [k]$.............  } rApply
+{   @ ``si`ks[ ]k$.............  } rApply
+{   @ ``si`k[s] k$.............  } rApply
+{   @ ``si`[k]s k$.............  } rApply
+{   @ ``si[`]ks k$.............  } rApply
+{   @ ``s[i]`ks k$.............  } rApply
+{   @ ``[s]i`ks k$.............  } rApply
+{   @ `[`]si`ks k$.............  } rApply
+{   @ [`]`si`ks k$.............  } rApply
+{   @[ ]``si`ks k$.............  } rApply
+{   [@] ``si`ks k$.............  } rApply
+{   @[ ]``si`ks k$.............  } rAp1
+{   @ [`]`si`ks k$.............  } rApA
+{   @ `[`]si`ks k$.............  } rApA
+{   @ ``[s]i`ks k$.............  } rApA
+{   @ ```[i]`ks k$.............  } rApS
+{   @ ```s[`]ks k$.............  } rApI
+{   @ ```si[k]s k$.............  } rApA
+{   @ ```si`[s] k$.............  } rApK
+{   @ ```si`k[ ]k$.............  } rApS
+{   @ ```si`ks[k]$.............  } rDone
+{   @ ```si`ksk[$].............  } rDone
+{   @ ```si`ksk$[.]............  } rRun
+{   @ ```si`ksk$.[.]...........  } rRun
+{   @ ```si`ksk$..[.]..........  } rRun
+{   @ ```si`ksk$...[.].........  } rRun
+{   @ ```si`ksk$....[.]........  } rRun
+{   @ ```si`ksk$.....[.].......  } rRun
+{   @ ```si`ksk$......[.]......  } rRun
+{   @ ```si`ksk$.......[.].....  } rRun
+{   @ ```si`ksk$........[.]....  } rRun
+{   @ ```si`ksk$.........[.]...  } rRun
+{   @ ```si`ksk$..........[.]..  } rRun
+{   @ ```si`ksk$...........[.].  } rRun
+{   @ ```si`ksk$............[.]  } rRun
+{   @ ```si`ksk$.............[ ] } rRun
+{   @ ```si`ksk$............[.]  } rRestart
+{   @ ```si`ksk$...........[.]   } rRestart
+{   @ ```si`ksk$..........[.]    } rRestart
+{   @ ```si`ksk$.........[.]     } rRestart
+{   @ ```si`ksk$........[.]      } rRestart
+{   @ ```si`ksk$.......[.]       } rRestart
+{   @ ```si`ksk$......[.]        } rRestart
+{   @ ```si`ksk$.....[.]         } rRestart
+{   @ ```si`ksk$....[.]          } rRestart
+{   @ ```si`ksk$...[.]           } rRestart
+{   @ ```si`ksk$..[.]            } rRestart
+{   @ ```si`ksk$.[.]             } rRestart
+{   @ ```si`ksk$[.]              } rRestart
+{   @ ```si`ksk[$]               } rRestart
+{   @ ```si`ks[k]$               } rRestart
+{   @ ```si`k[s]k$               } rRestart
+{   @ ```si`[k]sk$               } rRestart
+{   @ ```si[`]ksk$               } rRestart
+{   @ ```s[i]`ksk$               } rRestart
+{   @ ```[s]i`ksk$               } rRestart
+{   @ ``[`]si`ksk$               } rRestart
+{   @ `[`]`si`ksk$               } rRestart
+{   @ [`]``si`ksk$               } rRestart
+{   @[ ]```si`ksk$               } rRestart
+{   [@] ```si`ksk$               } rRestart
+{    [ ]```si`ksk$               } rReflect
+{     [`]``si`ksk$               } rReflect
+{     `[`]`si`ksk$               } rReflect
+{     ``[`]si`ksk$               } rReflect
+{     ```[s]i`ksk$               } rReflect
+{     ```s[i]`ksk$               } rReflect
+{     ```si[`]ksk$               } rReflect
+{     ```si`[k]sk$               } rReflect
+{     ```si`k[s]k$               } rReflect
+{     ```si`ks[k]$               } rReflect
+{     ```si`ksk[$]               } rReflect
+{     ```si`ksk$[ ]              } rRefl@
+{     ```si`ksk[$]@              } Start
+{     ```si`ks[k]$@              } Start
+{     ```si`k[s]k$@              } MarkK1
+{     ```si`ks[k]$@              } Delay
+{     ```si`k[s]k$@              } Start
+{     ```si`[k]sk$@              } MarkS1
+{     ```si`k[s]k$@              } Delay
+{     ```si`[k]sk$@              } Start
+{     ```si[`]ksk$@              } MarkK1
+{     ```s[i]`ksk$@              } MarkK2
+{     ```si[`]ksk$@              } Delay
+{     ```s[i]`ksk$@              } Start
+{     ```[s]i`ksk$@              } MarkI1
+{     ```s[i]`ksk$@              } Delay
+{     ```[s]i`ksk$@              } Start
+{     ``[`]si`ksk$@              } MarkS1
+{     `[`]`si`ksk$@              } MarkS2
+{     [`]``si`ksk$@              } MarkS3
+{     `[`]`si`ksk$@              } MarkS
+{     ``[`]si`ksk$@              } MarkS
+{     ```[s]i`ksk$@              } MarkS
+{     ``[`]Si`ksk$@              } Start
+{     `[`]`Si`ksk$@              } Start
+{     [`]``Si`ksk$@              } Start
+{    [ ]```Si`ksk$@              } Start
+{     [`]``Si`ksk$@              } Roll
+{     `[`]`Si`ksk$@              } Roll
+{     ``[`]Si`ksk$@              } Roll
+{     ```[S]i`ksk$@              } Roll
+{     ```S[i]`ksk$@              } Back
+{     ```Si[`]ksk$@              } Back
+{     ```Si`[k]sk$@              } Back
+{     ```Si`k[s]k$@              } Back
+{     ```Si`ks[k]$@              } Back
+{     ```Si`ksk[$]@              } Back
+{     ```Si`ks[k]$@              } Run
+{     ```Si`ks.[$]@              } StackK
+{     ```Si`ks.$[@]              } StackK
+{     ```Si`ks.$k[ ]             } Put_
+{     ```Si`ks.$k [ ]            } Put@
+{     ```Si`ks.$k[ ]@            } Done
+{     ```Si`ks.$[k] @            } Done
+{     ```Si`ks.[$]k @            } Done
+{     ```Si`ks[.]$k @            } Run
+{     ```Si`k[s].$k @            } Run
+{     ```Si`k.[.]$k @            } StackS
+{     ```Si`k..[$]k @            } StackS
+{     ```Si`k..$[k] @            } StackS
+{     ```Si`k..$k[ ]@            } StackS
+{     ```Si`k..$k [@]            } StackS
+{     ```Si`k..$k s[ ]           } Put_
+{     ```Si`k..$k s [ ]          } Put@
+{     ```Si`k..$k s[ ]@          } Done
+{     ```Si`k..$k [s] @          } Done
+{     ```Si`k..$k[ ]s @          } Done
+{     ```Si`k..$[k] s @          } Done
+{     ```Si`k..[$]k s @          } Done
+{     ```Si`k.[.]$k s @          } Run
+{     ```Si`k[.].$k s @          } Run
+{     ```Si`[k]..$k s @          } Run
+{     ```Si`.[.].$k s @          } StackK
+{     ```Si`..[.]$k s @          } StackK
+{     ```Si`...[$]k s @          } StackK
+{     ```Si`...$[k] s @          } StackK
+{     ```Si`...$k[ ]s @          } StackK
+{     ```Si`...$k [s] @          } StackK
+{     ```Si`...$k s[ ]@          } StackK
+{     ```Si`...$k s [@]          } StackK
+{     ```Si`...$k s k[ ]         } Put_
+{     ```Si`...$k s k [ ]        } Put@
+{     ```Si`...$k s k[ ]@        } Done
+{     ```Si`...$k s [k] @        } Done
+{     ```Si`...$k s[ ]k @        } Done
+{     ```Si`...$k [s] k @        } Done
+{     ```Si`...$k[ ]s k @        } Done
+{     ```Si`...$[k] s k @        } Done
+{     ```Si`...[$]k s k @        } Done
+{     ```Si`..[.]$k s k @        } Run
+{     ```Si`.[.].$k s k @        } Run
+{     ```Si`[.]..$k s k @        } Run
+{     ```Si[`]...$k s k @        } Run
+{     ```Si.[.]..$k s k @        } Apply
+{     ```Si..[.].$k s k @        } Apply
+{     ```Si...[.]$k s k @        } Apply
+{     ```Si....[$]k s k @        } Apply
+{     ```Si....$[k] s k @        } Apply
+{     ```Si....$k[ ]s k @        } Apply
+{     ```Si....$k [s] k @        } Apply
+{     ```Si....$k s[ ]k @        } Apply
+{     ```Si....$k s [k] @        } Apply
+{     ```Si....$k s k[ ]@        } Apply
+{     ```Si....$k s k [@]        } Apply
+{     ```Si....$k s k[ ]@        } Ap1
+{     ```Si....$k s [k] @        } ApA
+{     ```Si....$k s[ ]` @        } ApK
+{     ```Si....$k [s]k` @        } Done
+{     ```Si....$k[ ]sk` @        } Done
+{     ```Si....$[k] sk` @        } Done
+{     ```Si....[$]k sk` @        } Done
+{     ```Si...[.]$k sk` @        } Run
+{     ```Si..[.].$k sk` @        } Run
+{     ```Si.[.]..$k sk` @        } Run
+{     ```Si[.]...$k sk` @        } Run
+{     ```S[i]....$k sk` @        } Run
+{     ```S.[.]...$k sk` @        } StackI
+{     ```S..[.]..$k sk` @        } StackI
+{     ```S...[.].$k sk` @        } StackI
+{     ```S....[.]$k sk` @        } StackI
+{     ```S.....[$]k sk` @        } StackI
+{     ```S.....$[k] sk` @        } StackI
+{     ```S.....$k[ ]sk` @        } StackI
+{     ```S.....$k [s]k` @        } StackI
+{     ```S.....$k s[k]` @        } StackI
+{     ```S.....$k sk[`] @        } StackI
+{     ```S.....$k sk`[ ]@        } StackI
+{     ```S.....$k sk` [@]        } StackI
+{     ```S.....$k sk` i[ ]       } Put_
+{     ```S.....$k sk` i [ ]      } Put@
+{     ```S.....$k sk` i[ ]@      } Done
+{     ```S.....$k sk` [i] @      } Done
+{     ```S.....$k sk`[ ]i @      } Done
+{     ```S.....$k sk[`] i @      } Done
+{     ```S.....$k s[k]` i @      } Done
+{     ```S.....$k [s]k` i @      } Done
+{     ```S.....$k[ ]sk` i @      } Done
+{     ```S.....$[k] sk` i @      } Done
+{     ```S.....[$]k sk` i @      } Done
+{     ```S....[.]$k sk` i @      } Run
+{     ```S...[.].$k sk` i @      } Run
+{     ```S..[.]..$k sk` i @      } Run
+{     ```S.[.]...$k sk` i @      } Run
+{     ```S[.]....$k sk` i @      } Run
+{     ```[S].....$k sk` i @      } Run
+{     ``[`]......$k sk` i @      } SearchS1
+{     `[`].......$k sk` i @      } SearchS2
+{     [`]........$k sk` i @      } SearchS3
+{     .[.].......$k sk` i @      } ProcS
+{     ..[.]......$k sk` i @      } ProcS
+{     ...[.].....$k sk` i @      } ProcS
+{     ....[.]....$k sk` i @      } ProcS
+{     .....[.]...$k sk` i @      } ProcS
+{     ......[.]..$k sk` i @      } ProcS
+{     .......[.].$k sk` i @      } ProcS
+{     ........[.]$k sk` i @      } ProcS
+{     .........[$]k sk` i @      } ProcS
+{     .........$[k] sk` i @      } ProcS
+{     .........$k[ ]sk` i @      } ProcS
+{     .........$k [s]k` i @      } ProcS
+{     .........$k s[k]` i @      } ProcS
+{     .........$k sk[`] i @      } ProcS
+{     .........$k sk`[ ]i @      } ProcS
+{     .........$k sk` [i] @      } ProcS
+{     .........$k sk` i[ ]@      } ProcS
+{     .........$k sk` i [@]      } ProcS
+{     .........$k sk` i[ ]@      } ProcS1
+{     .........$k sk` [i] @      } ProcS2
+{     .........$k sk`[ ]i @      } ProcS2
+{     .........$k sk[`] i @      } ProcS3
+{     .........$k s[k]` i @      } ProcS3
+{     .........$k [s]k` i @      } ProcS3
+{     .........$k[ ]sk` i @      } ProcS3
+{     .........$[k] sk` i @      } NextDup
+{     .........$K[ ]sk` i @      } DupK
+{     .........$K [s]k` i @      } DupK1
+{     .........$K s[k]` i @      } DupK1
+{     .........$K sk[`] i @      } DupK1
+{     .........$K sk`[ ]i @      } DupK1
+{     .........$K sk` [i] @      } ReplaceK
+{     .........$K sk` k[ ]@      } ReplaceI
+{     .........$K sk` ki[@]      } SearchPop
+{     .........$K sk` ki [ ]     } Search@
+{     .........$K sk` ki[ ]@     } SearchDup
+{     .........$K sk` k[i] @     } SearchDup
+{     .........$K sk` [k]i @     } SearchDup
+{     .........$K sk`[ ]ki @     } SearchDup
+{     .........$K sk[`] ki @     } SearchDup
+{     .........$K s[k]` ki @     } SearchDup
+{     .........$K [s]k` ki @     } SearchDup
+{     .........$K[ ]sk` ki @     } SearchDup
+{     .........$[K] sk` ki @     } SearchDup
+{     .........[$]k sk` ki @     } NextDup
+{     .........$[k] sk` ki @     } AddA
+{     .........$k[ ]sk` ki @     } AddA
+{     .........$k [s]k` ki @     } AddA1
+{     .........$k s[k]` ki @     } AddA1
+{     .........$k sk[`] ki @     } AddA1
+{     .........$k sk`[ ]ki @     } AddA1
+{     .........$k sk``[k]i @     } Add2A
+{     .........$k sk``k[i] @     } Add2A
+{     .........$k sk``ki[ ]@     } Add2A
+{     .........$k sk``ki [@]     } Add2A
+{     .........$k sk``ki  [ ]    } Next@
+{     .........$k sk``ki [ ]@    } Rep1
+{     .........$k sk``ki[ ] @    } Rep2
+{     .........$k sk``k[i]` @    } ApA
+{     .........$k sk``[k]`` @    } ApI
+{     .........$k sk`[`]i`` @    } ApK
+{     .........$k sk[`]ki`` @    } ApA
+{     .........$k s[k]`ki`` @    } ApA
+{     .........$k [s]``ki`` @    } ApK
+{     .........$k[ ]k``ki`` @    } ApS
+{     .........$[k]sk``ki`` @    } Done
+{     .........[$]ksk``ki`` @    } Done
+{     ........[.]$ksk``ki`` @    } Run
+{     .......[.].$ksk``ki`` @    } Run
+{     ......[.]..$ksk``ki`` @    } Run
+{     .....[.]...$ksk``ki`` @    } Run
+{     ....[.]....$ksk``ki`` @    } Run
+{     ...[.].....$ksk``ki`` @    } Run
+{     ..[.]......$ksk``ki`` @    } Run
+{     .[.].......$ksk``ki`` @    } Run
+{     [.]........$ksk``ki`` @    } Run
+{    [ ].........$ksk``ki`` @    } Run
+{     [.]........$ksk``ki`` @    } Restart
+{      [.].......$ksk``ki`` @    } Restart
+{       [.]......$ksk``ki`` @    } Restart
+{        [.].....$ksk``ki`` @    } Restart
+{         [.]....$ksk``ki`` @    } Restart
+{          [.]...$ksk``ki`` @    } Restart
+{           [.]..$ksk``ki`` @    } Restart
+{            [.].$ksk``ki`` @    } Restart
+{             [.]$ksk``ki`` @    } Restart
+{              [$]ksk``ki`` @    } Restart
+{              $[k]sk``ki`` @    } Restart
+{              $k[s]k``ki`` @    } Restart
+{              $ks[k]``ki`` @    } Restart
+{              $ksk[`]`ki`` @    } Restart
+{              $ksk`[`]ki`` @    } Restart
+{              $ksk``[k]i`` @    } Restart
+{              $ksk``k[i]`` @    } Restart
+{              $ksk``ki[`]` @    } Restart
+{              $ksk``ki`[`] @    } Restart
+{              $ksk``ki``[ ]@    } Restart
+{              $ksk``ki`` [@]    } Restart
+{              $ksk``ki``[ ]     } Reflect
+{              $ksk``ki`[`]      } Reflect
+{              $ksk``ki[`]`      } Reflect
+{              $ksk``k[i]``      } Reflect
+{              $ksk``[k]i``      } Reflect
+{              $ksk`[`]ki``      } Reflect
+{              $ksk[`]`ki``      } Reflect
+{              $ks[k]``ki``      } Reflect
+{              $k[s]k``ki``      } Reflect
+{              $[k]sk``ki``      } Reflect
+{              [$]ksk``ki``      } Reflect
+{             [ ]$ksk``ki``      } Refl@
+{             @[$]ksk``ki``      } rStart
+{             @$[k]sk``ki``      } rStart
+{             @$k[s]k``ki``      } rMarkK1
+{             @$[k]sk``ki``      } rDelay
+{             @$k[s]k``ki``      } rStart
+{             @$ks[k]``ki``      } rMarkS1
+{             @$k[s]k``ki``      } rDelay
+{             @$ks[k]``ki``      } rStart
+{             @$ksk[`]`ki``      } rMarkK1
+{             @$ksk`[`]ki``      } rMarkK2
+{             @$ksk[`]`ki``      } rMarkK
+{             @$ks[k]``ki``      } rMarkK
+{             @$ksK[`]`ki``      } rStart
+{             @$ksK`[`]ki``      } rStart
+{             @$ksK``[k]i``      } rStart
+{             @$ksK``k[i]``      } rMarkK1
+{             @$ksK``[k]i``      } rDelay
+{             @$ksK``k[i]``      } rStart
+{             @$ksK``ki[`]`      } rMarkI1
+{             @$ksK``k[i]``      } rMarkI
+{             @$ksK``kI[`]`      } rStart
+{             @$ksK``kI`[`]      } rStart
+{             @$ksK``kI``[ ]     } rStart
+{             @$ksK``kI`[`]      } rRoll
+{             @$ksK``kI[`]`      } rRoll
+{             @$ksK``k[I]``      } rRoll
+{             @$ksK``[k]I``      } rRollrP
+{             @$ksK`[`]kI``      } rRollrP
+{             @$ksK[`]`kI``      } rRollrP
+{             @$ks[K]``kI``      } rRollrP
+{             @$k[s]K``kI``      } rRollrP
+{             @$[k]sK``kI``      } rRollrP
+{             @[$]ksK``kI``      } rRollrP
+{             @$[k]sK``kI``      } rRun
+{             @[$].sK``kI``      } rStackK
+{             [@]$.sK``kI``      } rStackK
+{            [ ]k$.sK``kI``      } rPut_
+{           [ ] k$.sK``kI``      } rPut@
+{           @[ ]k$.sK``kI``      } rDone
+{           @ [k]$.sK``kI``      } rDone
+{           @ k[$].sK``kI``      } rDone
+{           @ k$[.]sK``kI``      } rRun
+{           @ k$.[s]K``kI``      } rRun
+{           @ k$[.].K``kI``      } rStackS
+{           @ k[$]..K``kI``      } rStackS
+{           @ [k]$..K``kI``      } rStackS
+{           @[ ]k$..K``kI``      } rStackS
+{           [@] k$..K``kI``      } rStackS
+{          [ ]s k$..K``kI``      } rPut_
+{         [ ] s k$..K``kI``      } rPut@
+{         @[ ]s k$..K``kI``      } rDone
+{         @ [s] k$..K``kI``      } rDone
+{         @ s[ ]k$..K``kI``      } rDone
+{         @ s [k]$..K``kI``      } rDone
+{         @ s k[$]..K``kI``      } rDone
+{         @ s k$[.].K``kI``      } rRun
+{         @ s k$.[.]K``kI``      } rRun
+{         @ s k$..[K]``kI``      } rRun
+{         @ s k$...[`]`kI``      } rSearchK1
+{         @ s k$....[`]kI``      } rSearchK2
+{         @ s k$...[.].kI``      } rProcK
+{         @ s k$..[.]..kI``      } rProcK
+{         @ s k$.[.]...kI``      } rProcK
+{         @ s k$[.]....kI``      } rProcK
+{         @ s k[$].....kI``      } rProcK
+{         @ s [k]$.....kI``      } rProcK
+{         @ s[ ]k$.....kI``      } rProcK
+{         @ [s] k$.....kI``      } rProcK
+{         @[ ]s k$.....kI``      } rProcK
+{         [@] s k$.....kI``      } rProcK
+{          [ ]s k$.....kI``      } rLeftK
+{          @[s] k$.....kI``      } rLeftK1
+{          @s[ ]k$.....kI``      } rLeftK1
+{          @s [k]$.....kI``      } rLeftK2
+{          @s k[$].....kI``      } rLeftK2
+{          @s [k]$.....kI``      } rPosK
+{          @s[ ]^$.....kI``      } rDelK
+{          @[s] ^$.....kI``      } rCopy
+{          @ [ ]^$.....kI``      } rCopyS
+{          @  [^]$.....kI``      } rCopyS
+{          @ [ ]s$.....kI``      } rStubK
+{          @[ ]^s$.....kI``      } rCopy
+{          [@] ^s$.....kI``      } rCopy
+{           [ ]^s$.....kI``      } rEndK
+{            [^]s$.....kI``      } rEndK
+{           [ ] s$.....kI``      } rPut@
+{           @[ ]s$.....kI``      } rDone
+{           @ [s]$.....kI``      } rDone
+{           @ s[$].....kI``      } rDone
+{           @ s$[.]....kI``      } rRun
+{           @ s$.[.]...kI``      } rRun
+{           @ s$..[.]..kI``      } rRun
+{           @ s$...[.].kI``      } rRun
+{           @ s$....[.]kI``      } rRun
+{           @ s$.....[k]I``      } rRun
+{           @ s$....[.].I``      } rStackK
+{           @ s$...[.]..I``      } rStackK
+{           @ s$..[.]...I``      } rStackK
+{           @ s$.[.]....I``      } rStackK
+{           @ s$[.].....I``      } rStackK
+{           @ s[$]......I``      } rStackK
+{           @ [s]$......I``      } rStackK
+{           @[ ]s$......I``      } rStackK
+{           [@] s$......I``      } rStackK
+{          [ ]k s$......I``      } rPut_
+{         [ ] k s$......I``      } rPut@
+{         @[ ]k s$......I``      } rDone
+{         @ [k] s$......I``      } rDone
+{         @ k[ ]s$......I``      } rDone
+{         @ k [s]$......I``      } rDone
+{         @ k s[$]......I``      } rDone
+{         @ k s$[.].....I``      } rRun
+{         @ k s$.[.]....I``      } rRun
+{         @ k s$..[.]...I``      } rRun
+{         @ k s$...[.]..I``      } rRun
+{         @ k s$....[.].I``      } rRun
+{         @ k s$.....[.]I``      } rRun
+{         @ k s$......[I]``      } rRun
+{         @ k s$.......[`]`      } rSearchI
+{         @ k s$........[`]      } rRun
+{         @ k s$.......[.].      } rApply
+{         @ k s$......[.]..      } rApply
+{         @ k s$.....[.]...      } rApply
+{         @ k s$....[.]....      } rApply
+{         @ k s$...[.].....      } rApply
+{         @ k s$..[.]......      } rApply
+{         @ k s$.[.].......      } rApply
+{         @ k s$[.]........      } rApply
+{         @ k s[$].........      } rApply
+{         @ k [s]$.........      } rApply
+{         @ k[ ]s$.........      } rApply
+{         @ [k] s$.........      } rApply
+{         @[ ]k s$.........      } rApply
+{         [@] k s$.........      } rApply
+{         @[ ]k s$.........      } rAp1
+{         @ [k] s$.........      } rApA
+{         @ `[ ]s$.........      } rApK
+{         @ `k[s]$.........      } rDone
+{         @ `ks[$].........      } rDone
+{         @ `ks$[.]........      } rRun
+{         @ `ks$.[.].......      } rRun
+{         @ `ks$..[.]......      } rRun
+{         @ `ks$...[.].....      } rRun
+{         @ `ks$....[.]....      } rRun
+{         @ `ks$.....[.]...      } rRun
+{         @ `ks$......[.]..      } rRun
+{         @ `ks$.......[.].      } rRun
+{         @ `ks$........[.]      } rRun
+{         @ `ks$.........[ ]     } rRun
+{         @ `ks$........[.]      } rRestart
+{         @ `ks$.......[.]       } rRestart
+{         @ `ks$......[.]        } rRestart
+{         @ `ks$.....[.]         } rRestart
+{         @ `ks$....[.]          } rRestart
+{         @ `ks$...[.]           } rRestart
+{         @ `ks$..[.]            } rRestart
+{         @ `ks$.[.]             } rRestart
+{         @ `ks$[.]              } rRestart
+{         @ `ks[$]               } rRestart
+{         @ `k[s]$               } rRestart
+{         @ `[k]s$               } rRestart
+{         @ [`]ks$               } rRestart
+{         @[ ]`ks$               } rRestart
+{         [@] `ks$               } rRestart
+{          [ ]`ks$               } rReflect
+{           [`]ks$               } rReflect
+{           `[k]s$               } rReflect
+{           `k[s]$               } rReflect
+{           `ks[$]               } rReflect
+{           `ks$[ ]              } rRefl@
+{           `ks[$]@              } Start
+{           `k[s]$@              } Start
+{           `[k]s$@              } MarkS1
+{           `k[s]$@              } Delay
+{           `[k]s$@              } Start
+{           [`]ks$@              } MarkK1
+{          [ ]`ks$@              } MarkK2
+{           [`]ks$@              } Delay
+{          [ ]`ks$@              } Start
+{           [`]ks$@              } Roll
+{           `[k]s$@              } Roll
+{           `k[s]$@              } Roll
+{           `ks[$]@              } Roll
+Done
