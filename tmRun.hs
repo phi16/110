@@ -1,5 +1,7 @@
+import Prelude hiding (log)
+import Control.Monad
 import TM
-import Data.Map.Strict hiding (null)
+import Data.Map.Strict hiding (null,map,filter)
 
 got :: String -> Char
 got "_" = ' '
@@ -28,6 +30,18 @@ main :: IO ()
 main = do
   (r,s) <- makeMap "" empty
   t <- getLine
-  let m = construct t r s
-  trace m
+  let
+    m = construct t r s
+    p :: Machine -> Integer -> IO ()
+    p m d = case step m of
+      Left s -> do
+        putStr $ show d
+        print m
+        putStrLn s
+      Right m' -> do
+        when (d`mod`1000000==0) $ do
+          putStr $ show d
+          print m'
+        p m' (d+1)
+  p m 0
 
