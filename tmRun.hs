@@ -1,6 +1,7 @@
 import Prelude hiding (log)
 import Control.Monad
 import TM
+import System.Environment
 import Data.Map.Strict hiding (null,map,filter)
 
 got :: String -> Char
@@ -30,6 +31,7 @@ main :: IO ()
 main = do
   (r,s) <- makeMap "" empty
   t <- getLine
+  args <- getArgs
   let
     m = construct t r s
     p :: Machine -> Integer -> IO ()
@@ -43,5 +45,7 @@ main = do
           putStr $ show d
           print m'
         p m' (d+1)
-  p m 0
+  if length args > 0
+    then trace m
+    else p m 0
 
