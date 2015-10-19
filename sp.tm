@@ -333,15 +333,15 @@ i -> I rStart Right
 -- rRoll
 $ -> $ rRun Right
 S -> S rBack Left
-K -> K rRollrP Left
-I -> I rRollrP Left
+K -> K rRollP Left
+I -> I rRollP Left
 * -> * rRoll Left
--- rRollrP
+-- rRollP
 $ -> $ rRun Right
 S -> S rBack Left
-K -> K rRollrP Left
-I -> I rRollrP Left
-* -> * rRollrP Left
+K -> K rRollP Left
+I -> I rRollP Left
+* -> * rRollP Left
 -- rBack
 $ -> $ rRun Right
 S -> s rBack Left
