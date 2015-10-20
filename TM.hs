@@ -1,7 +1,10 @@
+{-# LANGUAGE LambdaCase #-}
+
 module TM where
 
 import Prelude hiding (lookup,log)
-import Data.Map.Strict
+import Data.Map.Strict hiding (map,foldr)
+import Data.Maybe hiding (mapMaybe)
 import Control.Applicative
 
 data Tape = Tape {
@@ -63,4 +66,32 @@ log (x:xs) r = show x : log xs r
 
 trace :: Machine -> IO ()
 trace m = mapM_ putStrLn $ uncurry log $ run m
+
+restrict :: Machine -> Machine
+restrict (Machine (Tape l c _) s r) = let
+    st = "[Start]"
+    en = "[End]"
+    state n = "[State" ++ show n ++ "]"
+    ss = reverse l
+    ss' = flip map (zip [1..] $ tail ss) $ \(t,x) ->
+      insert (state $ t-1,blank) $ Just (R,x,state t)
+    sp = insert ("[Start]",blank) $ Just (R,head ss,state 0)
+    se = case lookup (s,c) r <|> lookup (s,'*') r of
+      Just (Just p@(d,ch,s')) -> insert (state $ length ss - 1,blank) $ Just (d,if ch == '*' then c else ch,s')
+      Nothing -> id
+    r' = foldr ($) r $ sp:se:ss'
+    r'' = flip fmap r' $ \case
+      Nothing -> Just (R,'*',en)
+      Just p -> Just p
+    r''' = insert (en,'*') Nothing r''
+    rP = flip fmap r''' $ \case
+      Nothing -> Nothing
+      Just p@(d,ch,ns)
+        | ch == ' ' -> Just (d,'_',ns)
+        | otherwise -> Just p
+    rQ = flip mapKeys rP $ \(s,c) -> case c of
+      ' ' -> (s,'_')
+      _ -> (s,c)
+    rR = union rP rQ
+  in Machine (Tape [] blank []) st rR
 

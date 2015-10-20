@@ -33,7 +33,9 @@ main = do
   t <- getLine
   args <- getArgs
   let
-    m = construct t r s
+    ver = "v"`elem`args
+    res = "r"`elem`args
+    m = (if res then restrict else id) $ construct t r s
     p :: Machine -> Integer -> IO ()
     p m d = case step m of
       Left s -> do
@@ -45,7 +47,7 @@ main = do
           putStr $ show d
           print m'
         p m' (d+1)
-  if length args > 0
+  if ver
     then trace m
     else p m 0
 
