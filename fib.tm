@@ -1,9 +1,9 @@
 -- Write
-* -> * Write1 Right 
+a -> a Write1 Right
 -- Write1
-* -> | Write2 Right 
+_ -> | Write2 Right
 -- Write2
-* -> $ Start Left
+_ -> $ Start Left
 
 -- Start
 a -> a Search Left
