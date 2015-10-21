@@ -1,6 +1,8 @@
 import Prelude hiding (log)
 import Control.Monad
-import TM
+import TM as T hiding (step)
+import qualified CTM as C hiding (step)
+import Mecha
 import System.Environment
 import Data.Map.Strict hiding (null,map,filter)
 
@@ -34,20 +36,32 @@ main = do
   args <- getArgs
   let
     ver = "v"`elem`args
+    out = "o"`elem`args
     res = "r"`elem`args
-    m = (if res then restrict else id) $ construct t r s
-    p :: Machine -> Integer -> IO ()
-    p m d = case step m of
-      Left s -> do
-        putStr $ show d
-        print m
-        putStrLn s
-      Right m' -> do
-        when (d`mod`1000000==0) $ do
-          putStr $ show d
-          print m'
-        p m' (d+1)
-  if ver
-    then trace m
-    else p m 0
-
+    clk = "c"`elem`args
+    phase = if clk
+      then 2
+      else if res
+        then 1
+        else 0
+    mode = if out
+      then 2
+      else if ver
+        then 1
+        else 0
+    m = construct t r s
+    rm = restrict m
+    cm = C.clockwisize rm
+  case mode of
+    0 -> case phase of
+      0 -> proc m 0
+      1 -> proc rm 0
+      2 -> proc cm 0
+    1 -> case phase of
+      0 -> trace m
+      1 -> trace rm
+      2 -> trace cm
+    2 -> putStrLn $ case phase of
+      0 -> stringify m
+      1 -> stringify rm
+      2 -> stringify rm

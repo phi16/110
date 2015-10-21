@@ -2,9 +2,12 @@
 
 module TM where
 
+import qualified Mecha as M
 import Prelude hiding (lookup,log)
-import Data.Map.Strict hiding (map,foldr)
+import Data.List (nub,delete)
+import Data.Map.Strict hiding (map,foldr,delete)
 import Data.Maybe hiding (mapMaybe)
+import Data.Either (partitionEithers)
 import Control.Applicative
 
 data Tape = Tape {
@@ -13,7 +16,7 @@ data Tape = Tape {
   right :: [Char]
 }
 type State = String
-data Direction = L | R
+data Direction = L | R deriving Show
 type Transition = Map (String,Char) (Maybe (Direction,Char,String))
 data Machine = Machine Tape State Transition
 
@@ -50,22 +53,12 @@ step (Machine t s r) = do
       R -> moveRight t c'
   return $ Machine t' s' r
 
-construct :: String -> Transition -> State -> Machine
+construct :: [Char] -> Transition -> State -> Machine
 construct ts r s = Machine (Tape (reverse $ init ts) (last ts) []) s r
 
-run :: Machine -> ([Machine],String)
-run m = case step m of
-  Left e -> ([m],e)
-  Right p -> let
-      (ms,e) = run p
-    in (m:ms,e)
-
-log :: [Machine] -> String -> [String]
-log [] r = [r]
-log (x:xs) r = show x : log xs r
-
-trace :: Machine -> IO ()
-trace m = mapM_ putStrLn $ uncurry log $ run m
+instance M.Mecha Machine where
+  step = step
+  stringify m@(Machine t s r) = unlines $ show m : map show (assocs r)
 
 restrict :: Machine -> Machine
 restrict (Machine (Tape l c _) s r) = let
@@ -79,12 +72,7 @@ restrict (Machine (Tape l c _) s r) = let
     se = case lookup (s,c) r <|> lookup (s,'*') r of
       Just (Just p@(d,ch,s')) -> insert (state $ length ss - 1,blank) $ Just (d,if ch == '*' then c else ch,s')
       Nothing -> id
-    r' = foldr ($) r $ sp:se:ss'
-    r'' = flip fmap r' $ \case
-      Nothing -> Just (R,'*',en)
-      Just p -> Just p
-    r''' = insert (en,'*') Nothing r''
-    rP = flip fmap r''' $ \case
+    rP = flip fmap r $ \case
       Nothing -> Nothing
       Just p@(d,ch,ns)
         | ch == ' ' -> Just (d,'_',ns)
