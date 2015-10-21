@@ -55,4 +55,5 @@ instance M.Mecha Machine where
   stringify m@(Machine t s r e) = unlines $ show m : ("End : " ++ e) : map show (assocs r)
 
 clockwisize :: T.Machine -> Machine
-clockwisize (T.Machine t s r) = undefined
+clockwisize (T.Machine t s r) = Machine (Tape id '0' ['$']) "Po" tr "Pon" where
+  tr = fromList [(("Po",'1'),(Two '1' '0',"Po")),(("Po",'0'),(One '1',"Po")),(("Po",'$'),(One '$',"Po"))]

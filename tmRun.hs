@@ -64,4 +64,4 @@ main = do
     2 -> putStrLn $ case phase of
       0 -> stringify m
       1 -> stringify rm
-      2 -> stringify rm
+      2 -> stringify cm
