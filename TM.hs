@@ -87,11 +87,13 @@ restrict (Machine (Tape l c _) s r) = let
       Just p -> Just p
     r''' = insert (en,'*') Nothing r''
     symbols = delete '*' $ nub $ map snd $ keys r'''
-    removeAsterisk ((s,'*'),Nothing) = map Left [((s,c),Nothing) | c <- symbols]
+    removeAsterisk ((s,'*'),Nothing)
+      | s == en = map Right [((en,'*'),Nothing)]
+      | otherwise = map Left [((s,c),Nothing) | c <- symbols]
     removeAsterisk ((s,'*'),Just (d,'*',s')) = map Left [((s,c),Just (d,if c == blank then '_' else c,s')) | c <- symbols]
     removeAsterisk ((s,'*'),Just p) = map Left [((s,c),Just p) | c <- symbols]
     removeAsterisk ((s,c),Nothing) = [Right ((s,c),Nothing)]
-    removeAsterisk ((s,c),Just (d,'*',s')) = map Right [((s,c),Just (d,ch,s')) | ch <- symbols]
+    removeAsterisk ((s,c),Just (d,'*',s')) = map Right [((s,c),Just (d,c,s'))]
     removeAsterisk e@((s,c),Just (d,ch,s')) = [Right e]
     (rA,rB) = partitionEithers $ toList r''' >>= removeAsterisk
     r'''' = fromList rB `union` fromList rA
