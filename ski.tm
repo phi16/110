@@ -43,7 +43,7 @@ i -> I Start Left
 * -> * MarkI Right
 
 -- Roll
-$ .
+$ -> _ End Right
 S -> S Back Right
 K -> K RollP Right
 I -> I RollP Right
@@ -577,6 +577,11 @@ $ -> $ rRefl@ Right
 * -> * rReflect Right
 -- rRefl@
 _ -> @ Start Left
+
+-- End
+@ -> _ End2 Left
+-- End2
+* .
 
 Write
 ```s`k``sii``s``s`ksk`k``sii`k`sk

@@ -43,7 +43,7 @@ i -> I Start Left
 * -> * MarkI Right
 
 -- Roll
-$ .
+$ -> _ End Right
 S -> S Back Right
 K -> K RollP Right
 I -> I RollP Right
@@ -577,6 +577,11 @@ $ -> $ rRefl@ Right
 * -> * rReflect Right
 -- rRefl@
 _ -> @ Start Left
+
+-- End
+@ -> _ End2 Left
+-- End2
+* .
 
 Write
 ```````s``s``s`ksk`k``sii``s``s`ksk`k``sii``s`k`s``s`ks``s``s`ks``s`k`s`ki``s``s`ks``s`kk``s`k``si`kk``s``si`k`k`ki`kk`k``s``si`k`k`k`ki`kk`k`k`ki``s`k`s`k`s``s`k``s`ks``s`k`s`ks``s`k`s`kk``s`k`sik``s``si`kk`k`ki``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s``s`ks``s`k`s`ks``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s`k`s`k`si``s`k`s`kk``s`k`sik`k`kk`k`k`ki`k`k``s``s`ks``s`k`s`ks``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s`k`s``s`ks``s`kk``s`ks``s`k`sik``s`kk``s`k`s`kk``s`k`sik`k`kk`k`k`k`ki``s``s`ksk``s``s`ksk``s``s`ksk``s``s`kski```s``s``s`ksk`k``sii``s``s`ksk`k``sii``s`k```s`ks``s`k`s`ks``s`k`s`kk``s`k`siki``s`k```s`ks``s`k`s`ks``s`k`s`kk``s`k`siki``s````s``s``s`ksk`k``sii``s``s`ksk`k``sii``s`k`s`k`s``s`ks``s``s`ks``s`k`s`ki``s``s`ks``s`kk``s`k``si`kk``s``si`k`k`k`ki`kk`k``s``si`k`k`k`ki`kk`k`k`ki``s`k`s``s`ks``s`k`s`ks``s`k`s`k`s`k``s`ks``s`k`s`ks``s`k`s`kk``s`k`sik``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s``si`kk`k`ki`k`k``s``si`kk`k`ki``s``s`ks``s`k`s`ks``s`k`s`k`s`ks``s`k`s`k`s`kk``s``s`ks``s`k`s`ks`s`kk`k`k``s``s`ks``s`k`s`ks``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s`k`s``s`ks``s`kk``s`ks``s`k`sik``s`kk``s`k`s`kk``s`k`sik`k`kk`k`k`k`ki`k`k`k``s``s`ks``s`k`s`ks``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s`k`s``s`ks``s`kk``s`ks``s`k`sik``s`kk``s`k`s`kk``s`k`sik`k`kk`k`k`k`ki``s`k`s``s`ks``s`k`s`ks`s`kkk``s``s`ks``s`k`s`ks``s``s`ks``s`k`s`ks``s`k`s`kk``s``s`ksk`k``s`k`s``s`ks``s`kk``s`ks``s`k`sik``s`kk``s`k`s`kk``s`k`sik`k`kk`k`k`k`ki``s`k``s`ks``s`k`s`ks``s`k`s`kk``s`k`sik``s``si`k`s``s`ksk`k`ki`ki
