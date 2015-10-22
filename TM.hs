@@ -61,17 +61,8 @@ instance M.Mecha Machine where
   stringify m@(Machine t s r) = unlines $ show m : map show (assocs r)
 
 restrict :: Machine -> Machine
-restrict (Machine (Tape l c _) s r) = let
-    st = "[Start]"
+restrict (Machine t s r) = let
     en = "[End]"
-    state n = "[State" ++ show n ++ "]"
-    ss = reverse l
-    ss' = flip map (zip [1..] $ tail ss) $ \(t,x) ->
-      insert (state $ t-1,blank) $ Just (R,x,state t)
-    sp = insert ("[Start]",blank) $ Just (R,head ss,state 0)
-    se = case lookup (s,c) r <|> lookup (s,'*') r of
-      Just (Just p@(d,ch,s')) -> insert (state $ length ss - 1,blank) $ Just (d,if ch == '*' then c else ch,s')
-      Nothing -> id
     rP = flip fmap r $ \case
       Nothing -> Nothing
       Just p@(d,ch,ns)
@@ -81,7 +72,7 @@ restrict (Machine (Tape l c _) s r) = let
       ' ' -> (s,'_')
       _ -> (s,c)
     rR = union rP rQ
-    r' = foldr ($) rR $ sp:se:ss'
+    r' = rR
     r'' = flip fmap r' $ \case
       Nothing -> Just (R,'*',en)
       Just p -> Just p
@@ -97,5 +88,5 @@ restrict (Machine (Tape l c _) s r) = let
     removeAsterisk e@((s,c),Just (d,ch,s')) = [Right e]
     (rA,rB) = partitionEithers $ toList r''' >>= removeAsterisk
     r'''' = fromList rB `union` fromList rA
-  in Machine (Tape [] blank []) st r''''
+  in Machine t s r''''
 
