@@ -3,7 +3,7 @@
 module TM where
 
 import qualified Mecha as M
-import Prelude hiding (lookup,log)
+import Prelude hiding (lookup,log,filter)
 import Data.List (nub,delete)
 import Data.Map.Strict hiding (map,foldr,delete)
 import Data.Maybe hiding (mapMaybe)
@@ -16,7 +16,7 @@ data Tape = Tape {
   right :: [Char]
 }
 type State = String
-data Direction = L | R deriving Show
+data Direction = L | R deriving (Eq, Show)
 type Transition = Map (String,Char) (Maybe (Direction,Char,String))
 data Machine = Machine Tape State Transition
 
@@ -62,7 +62,6 @@ instance M.Mecha Machine where
 
 restrict :: Machine -> Machine
 restrict (Machine t s r) = let
-    en = "[End]"
     rP = flip fmap r $ \case
       Nothing -> Nothing
       Just p@(d,ch,ns)
@@ -71,11 +70,26 @@ restrict (Machine t s r) = let
     rQ = flip mapKeys rP $ \(s,c) -> case c of
       ' ' -> (s,'_')
       _ -> (s,c)
-    rR = union rP rQ
-    r' = rR
-    r'' = flip fmap r' $ \case
-      Nothing -> Just (R,'*',en)
-      Just p -> Just p
+    r' = union rP rQ
+    en = "[End]"
+    endSt = nub $ map fst $ keys $ filter (==Nothing) r'
+    endSti = endSt !! 0
+    endAp = case length endSt of
+      1 -> let
+          bls = filterWithKey (\(sK,cK) _ -> sK == endSti) r'
+        in not $ all (==Nothing) $ elems bls
+      _ -> True
+    r'' = if endAp
+      then flip fmap r' $ \case
+        Nothing -> Just (R,'*',en)
+        Just p -> Just p
+      else flip mapMaybeWithKey r' $ \(sk,sc) v -> if sk == endSti
+        then Nothing
+        else Just $ case v of
+          Nothing -> Nothing
+          Just (d,c,si) -> if si == endSti
+            then Just (d,c,en)
+            else Just (d,c,si)
     r''' = insert (en,'*') Nothing r''
     symbols = delete '*' $ nub $ map snd $ keys r'''
     removeAsterisk ((s,'*'),Nothing)
