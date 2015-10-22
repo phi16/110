@@ -52,16 +52,9 @@ main = do
     m = construct t r s
     rm = restrict m
     cm = C.clockwisize rm
-  case mode of
-    0 -> case phase of
-      0 -> proc m 0
-      1 -> proc rm 0
-      2 -> proc cm 0
-    1 -> case phase of
-      0 -> trace m
-      1 -> trace rm
-      2 -> trace cm
-    2 -> putStrLn $ case phase of
-      0 -> stringify m
-      1 -> stringify rm
-      2 -> stringify cm
+    inst :: Mecha a => a -> IO ()
+    inst = [flip proc 0, trace, putStrLn . stringify] !! mode
+  case phase of
+    0 -> inst m
+    1 -> inst rm
+    2 -> inst cm
