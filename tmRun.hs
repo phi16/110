@@ -2,6 +2,7 @@ import Prelude hiding (log)
 import Control.Monad
 import TM as T hiding (step)
 import qualified CTM as C hiding (step)
+import qualified CTS as T hiding (step)
 import Mecha
 import System.Environment
 import Data.Map.Strict hiding (null,map,filter)
@@ -39,11 +40,14 @@ main = do
     out = "o"`elem`args
     res = "r"`elem`args
     clk = "c"`elem`args
-    phase = if clk
-      then 2
-      else if res
-        then 1
-        else 0
+    tag = "t"`elem`args
+    phase = if tag
+      then 3
+      else if clk
+        then 2
+        else if res
+          then 1
+          else 0
     mode = if out
       then 2
       else if ver
@@ -52,9 +56,11 @@ main = do
     m = construct t r s
     rm = restrict m
     cm = C.clockwisize rm
+    tm = T.tagSystemize cm
     inst :: Mecha a => a -> IO ()
     inst = [flip proc 0, trace, putStrLn . stringify] !! mode
   case phase of
     0 -> inst m
     1 -> inst rm
     2 -> inst cm
+    3 -> inst tm
