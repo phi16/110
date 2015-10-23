@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE OverlappingInstances #-}
 {-# LANGUAGE LambdaCase #-}
 
 module CTS where
@@ -6,63 +7,74 @@ module CTS where
 import qualified CTM as C
 import qualified Mecha as M
 import Prelude hiding (log)
+import Data.List (group)
+import Data.Array
 
-data Binary = O | I
+data Binary = O Int | I
 data Tape = Tape {
   next :: [Binary],
   store :: [Binary] -> [Binary]
 }
 data Words = Words {
-  rest :: [[Binary]],
-  done :: [[Binary]] -> [[Binary]]
+  point :: Integer,
+  size :: Integer,
+  words :: Array Integer [Binary]
 }
 data Machine = Machine Tape Words
 
 instance {-# OVERLAPPING #-} Show [Binary] where
-  show xs = map i xs where
-    i O = '0'
-    i I = '1'
+  show xs = concatMap i xs where
+    i (O n) = replicate n '0' -- "0{" ++ show n ++ "}"
+    i I = "1"
 
 instance Show Tape where
   show (Tape r s) = "{" ++ show r ++ show (s []) ++ "}"
 
 instance Show Machine where
-  show (Machine t (Words [] d)) = show t ++ (' ':show (head $ d []))
-  show (Machine t (Words (x:xs) _)) = show t ++ (' ':show x)
+  show (Machine t (Words p _ v)) = show t ++ (' ':show (v!p))
 
-put :: Tape -> [Binary] -> Maybe (Binary,Tape)
-put (Tape [] d) ys
-  | (p:ps) <- d [] = Just (p,Tape ps (ys++))
-  | otherwise = Nothing
-put (Tape (x:xs) d) ys = Just (x,Tape xs $ d.(ys++))
-
-rot :: Words -> ([Binary],Words)
-rot (Words [] d) = rot $ Words (d []) id
-rot (Words (x:xs) d) = (x, Words xs $ d.(x:))
+rot :: Integer -> Words -> ([Binary],Words)
+rot 0 (Words p s w) = (w!p,Words ((p+1)`mod`s) s w)
+rot k (Words p s w) = rot 0 $ Words ((p+k)`mod`s) s w
 
 step :: Machine -> Either String Machine
-step (Machine ts ws) = let
-    p@(~(Just (r,t'))) = put ts b
-    (v,vs) = rot ws
-    b = case r of
-      I -> v
-      O -> []
-    m' = Machine t' vs
-  in case p of
-    Nothing -> Left "Done"
-    Just _ -> Right m'
+step (Machine (Tape [] d) ws) = case d [] of
+  [] -> Left "Done"
+  p -> step $ Machine (Tape p id) ws
+step (Machine (Tape (O 1:xs) d) ws) = let
+    (_,wi) = rot 0 ws
+  in Right $ Machine (Tape xs d) wi
+step (Machine (Tape (O n:xs) d) ws) = step $ Machine (Tape (O 1:O (n-1):xs) d) ws
+step (Machine (Tape (I:xs) d) ws) = let
+    (v,wi) = rot 0 ws
+  in Right $ Machine (Tape xs $ d . (v++)) wi
+
+eff :: Machine -> Either String (Integer,Machine)
+eff (Machine (Tape [] d) ws) = case d [] of
+  [] -> Left "Done"
+  p -> eff $ Machine (Tape p id) ws
+eff (Machine (Tape (O n:xs) d) ws) = let
+    ni = fromIntegral n
+    (_,wi) = rot (ni-1) ws
+  in Right $ (ni,Machine (Tape xs d) wi)
+eff (Machine (Tape (I:xs) d) ws) = let
+    (v,wi) = rot 0 ws
+  in Right $ (1,Machine (Tape xs $ d . (v++)) wi)
 
 construct :: [Char] -> [[Char]] -> Machine
-construct xs vs = Machine (Tape (p xs) id) $ Words (map p vs) id where
-  p = map $ \case
-    '1' -> I
-    '0' -> O
+construct xs vs = Machine (Tape (p xs) id) $ cons $ map p vs where
+  cons us = Words 0 l $ listArray (0,l-1) us where
+    l = fromIntegral $ length us
+  p xs = group xs >>= \xs -> case head xs of
+    '1' -> replicate (length xs) I
+    '0' -> [O $ fromIntegral $ length xs]
 
 instance M.Mecha Machine where
   step = step
+  eff = eff
   stringify m@(Machine _ w) = unlines $ show m : map show ws where
     ws = case w of
-      Words rs dn -> rs ++ dn []
+      Words p s w' -> elems w'
 
 tagSystemize :: C.Machine -> Machine
 tagSystemize _ = construct "100100100" ["010001","100","100100100","","",""]

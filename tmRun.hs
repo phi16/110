@@ -58,7 +58,7 @@ main = do
     cm = C.clockwisize rm
     tm = T.tagSystemize cm
     inst :: Mecha a => a -> IO ()
-    inst = [flip proc 0, trace, putStrLn . stringify] !! mode
+    inst = [proc, trace, putStrLn . stringify] !! mode
   case phase of
     0 -> inst m
     1 -> inst rm
