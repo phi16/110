@@ -10,7 +10,7 @@ import Prelude hiding (log)
 import Data.List (group)
 import Data.Array
 
-data Binary = O Int | I
+data Binary = O Int | I deriving Eq
 data Tape = Tape {
   next :: [Binary],
   store :: [Binary] -> [Binary]
@@ -24,7 +24,7 @@ data Machine = Machine Tape Words
 
 instance {-# OVERLAPPING #-} Show [Binary] where
   show xs = concatMap i xs where
-    i (O n) = replicate n '0' -- "0{" ++ show n ++ "}"
+    i (O n) = replicate n '0'
     i I = "1"
 
 instance Show Tape where
@@ -54,9 +54,17 @@ eff (Machine (Tape [] d) ws) = case d [] of
   [] -> Left "Done"
   p -> eff $ Machine (Tape p id) ws
 eff (Machine (Tape (O n:xs) d) ws) = let
-    ni = fromIntegral n
+    (be,xsu) = span (/=I) xs
+    (bn,xs',d') = if null xsu
+      then let
+          (br,bu) = span (/=I) $ d []
+        in (br,bu,id)
+      else ([],xsu,d)
+    n' = n + sum (mi be) + sum (mi bn) where
+      mi = map (\(O n) -> n)
+    ni = fromIntegral n'
     (_,wi) = rot (ni-1) ws
-  in Right $ (ni,Machine (Tape xs d) wi)
+  in Right $ (ni,Machine (Tape xs' d') wi)
 eff (Machine (Tape (I:xs) d) ws) = let
     (v,wi) = rot 0 ws
   in Right $ (1,Machine (Tape xs $ d . (v++)) wi)
