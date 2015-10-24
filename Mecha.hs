@@ -33,7 +33,7 @@ proc m = procI m 0 0 where
       print m
       putStrLn s
     Right (n,m') -> do
-      when (d`mod`1000000==0) $ do
+      when (d`mod`1==0) $ do
         putStr $ show $ ds+n
         print m'
       procI m' (d+1) $! ds+n
