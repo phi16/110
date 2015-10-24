@@ -93,7 +93,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
     symbols = nub $ map snd $ keys r
     states = nub $ map fst $ keys r
     symPP = fromList $ flip zip [0..] symbols
-    staPP = fromList $ flip zip [0..] states
+    staPP = fromList $ flip zip [1..] states
     sym x = fromJust $ lookup x symPP
     sta q = fromJust $ lookup q staPP
 
@@ -104,7 +104,8 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
 
     s = fromIntegral $ length symbols
     q = fromIntegral $ length states
-    bZ = (3+s)*6
+    uZ = 3*s+3
+    bZ = uZ*3
     z = bZ*(q+2) + 1 -- Maybe
     tap i a = opt [O i,I,O $ z-i-1]
     po e = (e,)
@@ -117,23 +118,43 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
     muM = po "{mu}" $ tap (s*2+2) $ 2*z
     muP = po "[mu\']" $ tap (s*2+3) $ 2*z
     symPCode x = po ['[',x,'\'',']'] $ tap (sym x + s*2 + 3) z
-    state1 q = poe ["[1|",q,"]"] $ tap (bZ*sta q+20) $ 2*z
-    stateG1 q = poe ["<1|",q,">"] $ tap (bZ*sta q+25) $ 2*z
-    state1' q = poe ["[1'|",q,"]"] $ tap (bZ*sta q+21) $ 2*z+10
-    stateG1' q = poe ["<1'|",q,">"] $ tap (bZ*sta q+26) $ 2*z+10
-    state2 q = poe ["[2|",q,"]"] $ tap (bZ*sta q+12) $ 2*z+10
-    stateG2 q = poe ["<2|",q,">"] $ tap (bZ*sta q+17) $ 2*z+10
-    state3 q = poe ["[3|",q,"]"] $ tap (bZ*sta q+14) $ z+bZ*sta q+20
-    stateG3 q = poe ["<3|",q,">"] $ tap (bZ*sta q+19) $ z+bZ*sta q+30
+    state1 q = poe ["[1|",q,"]"] $ tap (bZ*sta q+uZ*2) $ 2*z
+    stateG1 q = poe ["<1|",q,">"] $ tap (bZ*sta q+uZ*2+4) $ 2*z
+    state1' q = poe ["[1'|",q,"]"] $ tap (bZ*sta q+uZ*2+1) $ 2*z+2*uZ
+    stateG1' q = poe ["<1'|",q,">"] $ tap (bZ*sta q+uZ*2+5) $ 2*z+2*uZ
+    state2 q = poe ["[2|",q,"]"] $ tap (bZ*sta q+uZ+2) $ 2*z+2*uZ
+    stateG2 q = poe ["<2|",q,">"] $ tap (bZ*sta q+uZ+6) $ 2*z+2*uZ
+    state3 q = poe ["[3|",q,"]"] $ tap (bZ*sta q+uZ+3) $ z+bZ*sta q+4*uZ
+    stateG3 q = poe ["<3|",q,">"] $ tap (bZ*sta q+uZ+7) $ z+bZ*sta q+6*uZ
     di = po "[D]" $ tap 39 $ 2*z+40
 
     defTape = {- opt $ -} concat $ map snd $ state1 st : map symCode t ++ replicate s' mu where
       t = cT : rT ++ lT []
       s' = 2 ^ ceiling (logBase 2 $ fromIntegral $ length t)
     wsv = let
-        hlv = [[muM],map symCode symbols,map symMCode symbols,[muM,muP]]
-        cnt = [map symPCode symbols,map symMCode symbols,[muM,muP]]
-        mrk = [map symMCode symbols,[muM,mu],map symCode symbols]
-        enf = [[("[blank]",[O $ 2*z-40]),mumu],map symCode symbols]
-      in concat $ concat [hlv,cnt,mrk,enf]
-  in construct defTape $ listArray (0,fromIntegral (length wsv)-1) wsv
+        none _ = ("[none]",[])
+        ori = zip [0..] $ concat $ concat [hlv,cnt,mrk] where -- [0,bZ)
+          hlv = [[muM],map symCode symbols,map symMCode symbols,[muM,muP],map none symbols]
+          cnt = [[],map symPCode symbols,map symMCode symbols,[muM,muP],map none symbols]
+          mrk = [[],map none symbols,map symMCode symbols,[muM,mu],map symCode symbols]
+        oriS q = let qi = sta q in zip [bZ*qi+uZ*2..] $ concat [map ($q) ss,pad,sms] where
+          ss = [state1',state2,ap.state1,nil,stateG1',stateG2,ap.stateG1]
+          ap (v,bi) = ('+':v,O (2*z-uZ*2) : bi)
+          pad = replicate (uZ-length ss) nil
+          tri s = case lookup (q,s) r of
+            Nothing -> none ()
+            Just (One e,q') -> ("("++q++[',',s,')'],map snd $ concat [symCode e,state1 q'])
+            Just (Two e f,q') -> ("("++q++[',',s,')'],map snd $ concat [di,symCode e,symCode f,state1 q'])
+          tru s = case lookup (q,s) r of
+            Nothing -> none ()
+            Just (One e,q') -> ("("++q++[',',s,')'],map snd $ concat [symCode e,state1 q'])
+            Just (Two e f,q') -> ("("++q++[',',s,')'],map snd $ concat [symCode e,symCode f,state1 q'])
+          sms = [[],map tri symbols,map symCode symbols,[mu,[]],map none symbols]
+          ses = [[],map tru symbols,map symCode symbols,[mu,[]],map none symbols]
+        cem = zip [z..] $ concat $ concat [hlv,cnt,mrk] where -- [z,z+bZ)
+          hlv = [[muP],map symCode symbols,map symMCode symbols,[muM,muP],map none symbols]
+          cnt = [[],map symCode symbols,map symMCode symbols,[muM,muP],map none symbols]
+          mrk = [[],map none symbols,map symMCode symbols,[muM,mu],map symMCode symbols]
+        cemS =
+      in concat $ concat [[ori,cem],map oriS states,map cemS states]
+  in construct defTape $ array (0,2*z-1) wsv
