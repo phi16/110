@@ -158,7 +158,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
             then [] -- Finish Condition
             else [(idx,de),(idx+bZ,de),(ids,dq),(ids+bZ,dq),(idx+1,sy kc),(idx+bZ+1,sy kc)]
         ams = states >>= \q -> let
-            def = [(cZ*sta q+bZ*3+1,mu),(cZ*sta q+bZ*4+1,mu),(cZ*sta q+bZ*6,st1 q)]
+            def = [(cZ*sta q+bZ*3+1,mu),(cZ*sta q+bZ*4+1,mu),(cZ*sta q+bZ*3+2,mu),(cZ*sta q+bZ*4+2,mu),(cZ*sta q+bZ*6,st1 q)]
             sbs = symbols >>= \s -> [(cZ*sta q+3*sym s+1,sy s),(cZ*sta q+3*sym s+bZ+1,sy s)]
           in def ++ sbs
         po = zip [bZ*4,bZ*4+3..] $ con [mu,mu] : map sy symbols
