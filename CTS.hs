@@ -34,9 +34,8 @@ instance Show Tape where
   show (Tape r s) = "{" ++ show r ++ show (s []) ++ "}"
 
 instance Show Machine where
---  show (Machine t (Words p _ v)) = show t ++ (' ':show p ++ show (v!p))
-  show (Machine t (Words p _ v)) = poi ++ (' ':show p ++ show (v!p)) where
-    poi = if (show t) !! 1 == '0' then "{poyo}" else take 40 $ show t
+  show (Machine t (Words p l v)) = poi ++ (' ':show p ++ show (v!((p+l-1)`mod`l))) where
+    poi = take 40 $ show t
 
 rot :: Integer -> Words -> ([Binary],Words)
 rot 0 (Words p s w) = (snd $ w!p,Words ((p+1)`mod`s) s w)
@@ -49,6 +48,7 @@ step (Machine (Tape [] d) ws) = case d [] of
 step (Machine (Tape (O 1:xs) d) ws) = let
     (_,wi) = rot 0 ws
   in Right $ Machine (Tape xs d) wi
+step (Machine (Tape (O 0:xs) d) ws) = step $ Machine (Tape xs d) ws
 step (Machine (Tape (O n:xs) d) ws) = step $ Machine (Tape (O 1:O (n-1):xs) d) ws
 step (Machine (Tape (I:xs) d) ws) = let
     (v,wi) = rot 0 ws
@@ -69,7 +69,10 @@ eff (Machine (Tape (O n:xs) d) ws) = let
       mi = map (\(O n) -> n)
     ni = fromIntegral n'
     (_,wi) = rot (ni-1) ws
-  in Right $ (ni,Machine (Tape xs' d') wi)
+    miu = Machine (Tape xs' d') wi
+  in case eff miu of
+    Left _ -> Right (ni,miu)
+    Right (d,m') -> Right (ni+d,m')
 eff (Machine (Tape (I:xs) d) ws) = let
     (v,wi) = rot 0 ws
   in Right $ (1,Machine (Tape xs $ d . (v++)) wi)
