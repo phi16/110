@@ -34,12 +34,20 @@ instance Show Tape where
   show (Tape r s) = "{" ++ show r ++ show (s []) ++ "}"
 
 instance Show Machine where
-  show (Machine t (Words p l v)) = poi ++ (' ':show p ++ show (v!((p+l-1)`mod`l))) where
-    poi = take 40 $ show t
+  show (Machine t (Words p l v)) = poi ++ (' ':show ((p+l-1)`mod`l) ++ show (v!((p+l-1)`mod`l))) where
+    poi = show t -- take 40 $ show t
 
 rot :: Integer -> Words -> ([Binary],Words)
 rot 0 (Words p s w) = (snd $ w!p,Words ((p+1)`mod`s) s w)
 rot k (Words p s w) = rot 0 $ Words ((p+k)`mod`s) s w
+
+endMachine :: [Binary] -> Bool
+endMachine [] = False
+endMachine xs = endF $ reverse xs where
+  endF [] = False
+  endF (O 0:ys) = endF ys
+  endF (O n:ys) = False
+  endF (I:ys) = True
 
 step :: Machine -> Either String Machine
 step (Machine (Tape [] d) ws) = case d [] of
@@ -52,7 +60,9 @@ step (Machine (Tape (O 0:xs) d) ws) = step $ Machine (Tape xs d) ws
 step (Machine (Tape (O n:xs) d) ws) = step $ Machine (Tape (O 1:O (n-1):xs) d) ws
 step (Machine (Tape (I:xs) d) ws) = let
     (v,wi) = rot 0 ws
-  in Right $ Machine (Tape xs $ d . (v++)) wi
+  in if endMachine v
+    then Left "Done"
+    else Right $ Machine (Tape xs $ d . (v++)) wi
 
 eff :: Machine -> Either String (Integer,Machine)
 eff (Machine (Tape [] d) ws) = case d [] of
@@ -75,7 +85,9 @@ eff (Machine (Tape (O n:xs) d) ws) = let
     Right (d,m') -> Right (ni+d,m')
 eff (Machine (Tape (I:xs) d) ws) = let
     (v,wi) = rot 0 ws
-  in Right $ (1,Machine (Tape xs $ d . (v++)) wi)
+  in if endMachine v
+    then Left "Done"
+    else Right $ (1,Machine (Tape xs $ d . (v++)) wi)
 
 construct :: [Binary] -> Array Integer (String,[Binary]) -> Machine
 construct xs vs = Machine (Tape xs id) w where
@@ -111,7 +123,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
     q = fromIntegral $ length states
     bZ = 3*s+3
     cZ = bZ*3
-    z = cZ*(q+2)+1
+    z = cZ*(q+2)+4+bZ
     poi s n d = (concat s,[O n,I,O $ d-n-1])
     st1 q = poi ["[1-",q,"]"] (cZ*sta q+bZ*2) $ 2*z
     st1' q = poi ["[1'-",q,"]"] (cZ*sta q+bZ*2+1) $ 2*z+bZ
@@ -153,20 +165,28 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
             idx = cZ*sta ks+3*sym kc+cZ
             ids = idx+bZ
             ns = st1 ws
-            dq = case wv of
-              C.One sp -> con [sy sp,ns]
-              C.Two sp sh -> con [sy sp,sy sh,ns]
+            ads = case wv of
+              C.One sp -> con [sy sp]
+              C.Two sp sh -> con [sy sp,sy sh]
+            dq = con [ads,ns]
             de = con [di,dq]
+            end = con [ads,poi ["[Done1]"] (2*z-4-bZ) $ 2*z-bZ]
           in if ws == "[End]"
-            then [] -- Finish Condition
+            then [(idx,end),(idx+bZ,end),(ids,end),(ids+bZ,end),(idx+1,sy kc),(idx+bZ+1,sy kc)] -- Finish Condition
             else [(idx,de),(idx+bZ,de),(ids,dq),(ids+bZ,dq),(idx+1,sy kc),(idx+bZ+1,sy kc)]
         ams = states >>= \q -> let
             def = [(cZ*sta q+bZ*3+1,mu),(cZ*sta q+bZ*4+1,mu),(cZ*sta q+bZ*3+2,mu),(cZ*sta q+bZ*4+2,mu),(cZ*sta q+bZ*6,st1 q)]
             sbs = symbols >>= \s -> [(cZ*sta q+3*sym s+1,sy s),(cZ*sta q+3*sym s+bZ+1,sy s)]
           in def ++ sbs
         po = zip [bZ*4,bZ*4+3..] $ con [mu,mu] : map sy symbols
-        po2 = [(z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4)]
-      in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2]
+        po2 = [
+          (z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4),
+          (2*z-4-bZ,poi ["[Done2]"] (2*z-3) $ 2*z),
+          (2*z-3-bZ,poi ["[Done3]"] (2*z-2+bZ) $ 2*z+bZ),
+          (2*z-2,poi ["[Done]"] (2*z-1) $ 2*z),
+          (2*z-1,poi ["[Done]"] (2*z-1) $ 2*z)]
+        endf = symbols >>= \s -> [(2*z-bZ+3*sym s,sy s)]
+      in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2,endf]
     ts = cT : rT ++ lT []
     ts' = (2^) $ ceiling $ logBase 2 $ fromIntegral $ length ts
     defTape = snd $ con $ concat [[st1 st],map sy ts,replicate ts' mu]
