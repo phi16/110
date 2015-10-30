@@ -35,7 +35,7 @@ instance Show Tape where
 
 instance Show Machine where
   show (Machine t (Words p l v)) = poi ++ (' ':show ((p+l-1)`mod`l) ++ show (v!((p+l-1)`mod`l))) where
-    poi = show t -- take 40 $ show t
+    poi = take 40 $ show t
 
 rot :: Integer -> Words -> ([Binary],Words)
 rot 0 (Words p s w) = (snd $ w!p,Words ((p+1)`mod`s) s w)
@@ -172,8 +172,8 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
             de = con [di,dq]
             end = con [ads,poi ["[Done1]"] (2*z-4-bZ) $ 2*z-bZ]
           in if ws == "[End]"
-            then [(idx,end),(idx+bZ,end),(ids,end),(ids+bZ,end),(idx+1,sy kc),(idx+bZ+1,sy kc)] -- Finish Condition
-            else [(idx,de),(idx+bZ,de),(ids,dq),(ids+bZ,dq),(idx+1,sy kc),(idx+bZ+1,sy kc)]
+            then [(idx,end),(ids,end),(idx+1,sy kc),(idx+bZ+1,sy kc)] -- Finish Condition
+            else [(idx,de),(ids,dq),(idx+1,sy kc),(idx+bZ+1,sy kc)]
         ams = states >>= \q -> let
             def = [(cZ*sta q+bZ*3+1,mu),(cZ*sta q+bZ*4+1,mu),(cZ*sta q+bZ*3+2,mu),(cZ*sta q+bZ*4+2,mu),(cZ*sta q+bZ*6,st1 q)]
             sbs = symbols >>= \s -> [(cZ*sta q+3*sym s+1,sy s),(cZ*sta q+3*sym s+bZ+1,sy s)]
