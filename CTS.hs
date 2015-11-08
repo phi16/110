@@ -118,7 +118,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
     q = fromIntegral $ length states
     bZ = 3*s+3
     cZ = bZ*3
-    z = cZ*(q+2)+4+bZ
+    z = cZ*(q+2)+1+bZ
     poi s n d = (concat s,[O n,I,O $ d-n-1])
     st1 q = poi ["[1-",q,"]"] (cZ*sta q+bZ*2) $ 2*z
     st1' q = poi ["[1'-",q,"]"] (cZ*sta q+bZ*2+1) $ 2*z+bZ
@@ -165,7 +165,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
               C.Two sp sh -> con [sy sp,sy sh]
             dq = con [ads,ns]
             de = con [di,dq]
-            end = con [ads,poi ["[Done1]"] (2*z-4-bZ) $ 2*z-bZ]
+            end = con [ads,poi ["[Done1]"] (2*z-1-bZ) $ 2*z-bZ]
           in if ws == "[End]"
             then [(idx,end),(ids,end),(idx+1,sy kc),(idx+bZ+1,sy kc)] -- Finish Condition
             else [(idx,de),(ids,dq),(idx+1,sy kc),(idx+bZ+1,sy kc)]
@@ -176,10 +176,11 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
         po = zip [bZ*4,bZ*4+3..] $ con [mu,mu] : map sy symbols
         po2 = [
           (z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4),
-          (2*z-4-bZ,poi ["[Done2]"] (2*z-3) $ 2*z+1)]
+          (2*z-1-bZ,poi ["[Done2]"] (2*z-1) $ 2*z+1)]
         endf = symbols >>= \s -> [(2*z-bZ+3*sym s,sy s)]
       in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2,endf]
     ts = cT : rT ++ lT []
     ts' = (2^) $ ceiling $ logBase 2 $ fromIntegral $ length ts
     defTape = snd $ con $ concat [[st1 st],map sy ts,replicate ts' mu]
-  in construct defTape (eArray // changes)
+    resPats = ixmap (0,2*z-1) pred $ eArray // changes
+  in construct [I] $ resPats // [(0,("[InitTape]",defTape))]
