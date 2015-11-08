@@ -1,4 +1,6 @@
 import Control.Applicative
+import System.IO
+import System.Directory
 
 po :: String -> IO String
 po xs = do
@@ -10,10 +12,23 @@ filt '0' = 'b'
 filt '1' = 'o'
 
 main :: IO ()
-main = pa 0
+main = do
+  tH <- openFile "temp.txt" WriteMode
+  d <- pa 0 tH
+  hClose tH
+  iW <- openFile "out.rle" WriteMode
+  iH <- openFile "temp.txt" ReadMode
+  hPutStr iW "x = "
+  hPutStr iW $ show d
+  hPutStrLn iW ", y = 1, rule = W110"
+  e <- hGetLine iH
+  hPutStrLn iW e
+  hClose iW
+  hClose iH
+  removeFile "temp.txt"
 
-pa :: Integer -> IO ()
-pa d = do
+pa :: Integer -> Handle -> IO Integer
+pa d h = do
   xs <- getLine
   if xs /= ""
     then do
@@ -23,6 +38,6 @@ pa d = do
           let [y,c] = words xs
           ys <- po y
           return $ concat $ replicate (read c) ys 
-      putStr $ map filt zs
-      pa $ (+d) $ fromIntegral $ length zs
-    else putStr "\n" >> print d
+      hPutStr h $ map filt zs
+      pa ((+d) $ fromIntegral $ length zs) h
+    else return d
