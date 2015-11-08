@@ -42,12 +42,7 @@ rot 0 (Words p s w) = (snd $ w!p,Words ((p+1)`mod`s) s w)
 rot k (Words p s w) = rot 0 $ Words ((p+k)`mod`s) s w
 
 endMachine :: [Binary] -> Bool
-endMachine [] = False
-endMachine xs = endF $ reverse xs where
-  endF [] = False
-  endF (O 0:ys) = endF ys
-  endF (O n:ys) = False
-  endF (I:ys) = True
+endMachine _ = False
 
 step :: Machine -> Either String Machine
 step (Machine (Tape [] d) ws) = case d [] of
@@ -181,10 +176,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
         po = zip [bZ*4,bZ*4+3..] $ con [mu,mu] : map sy symbols
         po2 = [
           (z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4),
-          (2*z-4-bZ,poi ["[Done2]"] (2*z-3) $ 2*z),
-          (2*z-3-bZ,poi ["[Done3]"] (2*z-2+bZ) $ 2*z+bZ),
-          (2*z-2,poi ["[Done]"] (2*z-1) $ 2*z),
-          (2*z-1,poi ["[Done]"] (2*z-1) $ 2*z)]
+          (2*z-4-bZ,poi ["[Done2]"] (2*z-3) $ 2*z+1)]
         endf = symbols >>= \s -> [(2*z-bZ+3*sym s,sy s)]
       in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2,endf]
     ts = cT : rT ++ lT []
