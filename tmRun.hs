@@ -4,7 +4,8 @@ import Prelude hiding (log)
 import Control.Monad
 import Control.Applicative ((<$>))
 import System.Environment
-import System.IO (isEOF)
+import System.Directory
+import System.IO
 import Data.Map.Strict hiding (null,map,filter)
 import TM as T hiding (step)
 import qualified CTM as C hiding (step)
@@ -23,25 +24,58 @@ parse t [n,"->",c,s,d] = Just ((t,got n),Just (which d,got c,s)) where
 parse t [n,"."] = Just ((t,got n),Nothing)
 parse t e = Nothing
 
-makeMap :: State -> Transition -> IO (Transition,State)
-makeMap s m = do
-  xs <- getLine
+makeMap :: Handle -> State -> Transition -> IO (Transition,State)
+makeMap hdl s m = do
+  xs <- hGetLine hdl
   if null xs
-    then makeMap s m
+    then makeMap hdl s m
     else if head xs == '-'
-      then makeMap (tail $ dropWhile (/=' ') xs) m
+      then makeMap hdl (tail $ dropWhile (/=' ') xs) m
       else case parse s $ words xs of
         Nothing -> return (m,xs)
-        Just p -> makeMap s $ uncurry insert p m
+        Just p -> makeMap hdl s $ uncurry insert p m
 
 main :: IO ()
 main = do
-  (r,s) <- makeMap "" empty
-  t <- getLine
-  outLenStr <- isEOF >>= \case
-    False -> Just <$> getLine
-    True -> return Nothing
   args <- getArgs
+  case length args of
+    0 -> dispHelp
+    _ -> let fn = head args in do
+      b <- doesFileExist fn
+      case b of
+        False -> do
+          putStrLn $ "Error : " ++ show fn ++ " doesn't exist."
+          putStrLn ""
+          dispHelp
+        True -> do
+          u <- openFile fn ReadMode
+          runTM u args
+
+dispHelp :: IO ()
+dispHelp = mapM_ putStrLn [
+  "Usage : ./tmRun <filename> <options>*",
+  "",
+  "Machine Mode",
+  "- {none} : Turing Machine",
+  "- r : Restricted Turing Machine",
+  "- c : Clockwise Turing Machine",
+  "- t : Cyclic Tag System",
+  "-- f : Don't create binaryEncoding",
+  "-- s : Efficient but 1Step",
+  "- g : Glider System",
+  "- a : Rule 110 Automaton",
+  "Running Option",
+  "- o : Output Machine",
+  "- v : Verbose Output"]
+
+runTM :: Handle -> [String] -> IO ()
+runTM hdl args = do
+  (r,s) <- makeMap hdl "" empty
+  t <- hGetLine hdl
+  outLenStr <- hIsEOF hdl >>= \case
+    False -> Just <$> hGetLine hdl
+    True -> return Nothing
+  hClose hdl
   let
     ver = "v"`elem`args
     out = "o"`elem`args
