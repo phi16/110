@@ -1,7 +1,7 @@
 -- Write
 a -> a Write1 Right
 -- Write1
-_ -> | Write2 Right
+_ -> , Write2 Right
 -- Write2
 _ -> $ Start Left
 
@@ -17,14 +17,14 @@ a -> _ Calc Right
 $ -> $ Back Left
 * -> * Calc Right
 -- Back
-| -> | Orig Right
+, -> , Orig Right
 _ -> _ Back1 Left 
 -- Back1
-| -> | Orig Right
+, -> , Orig Right
 _ -> _ Back2 Left
 * -> * Back1 Left
 -- Back2
-| -> | Copy Right
+, -> , Copy Right
 _ -> _ Copy Right
 * -> * Back2 Left
 -- Orig
@@ -67,12 +67,22 @@ _ -> $ Finish Left
 * -> $ Start Left
 
 -- Finish
-| -> | Check Left
+, -> , Check Left
 * -> * Finish Left
 -- Check
 a -> a Start Right
+* -> * End Right
+
+-- End
+, -> _ End Right
+_ -> , End Right
+$ -> _ End2 Left
+* -> * End Right
+-- End2
+, -> _ End3 Right
+-- End3
 * .
 
 Write
 aaaaaaaa
-Result : 63
+Result : 68
