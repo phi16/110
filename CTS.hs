@@ -177,7 +177,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
         po2 = [
           (z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4),
           (2*z-1-bZ,poi ["[Done2]"] (2*z-1) $ 2*z+1)]
-        endf = symbols >>= \s -> [(2*z-bZ+3*sym s,sy s)]
+        endf = symbols >>= \s -> if s == '_' then [] else [(2*z-bZ+3*sym s,sy s)]
       in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2,endf]
     ts = cT : rT ++ lT []
     ts' = (2^) $ ceiling $ logBase 2 $ fromIntegral $ length ts
