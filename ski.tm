@@ -585,3 +585,4 @@ _ -> @ Start Left
 
 Write
 ```s`k``sii``s``s`ksk`k``sii`k`sk
+Result : 3

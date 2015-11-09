@@ -10,7 +10,7 @@ import qualified Mecha as M
 import Prelude hiding (log,lookup)
 import Data.List (group,nub)
 import Data.Map.Strict (keys,fromList,lookup,toList)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust,fromMaybe,isJust)
 import Data.Array hiding (fromList)
 
 data Binary = O Integer | I deriving Eq
@@ -27,6 +27,8 @@ data Machine = Machine Tape Words
 
 instance {-# OVERLAPPING #-} Show [Binary] where
   show xs = concatMap i xs where
+    i (O 0) = ""
+    i (O 1) = "0"
     i (O n) = "0{" ++ show n ++ "}"
     i I = "1"
 
@@ -100,9 +102,10 @@ instance M.Mecha Machine where
     ws = map (\(z,(a,b)) -> concat[show z," : ",a," - ",show b]) $ zip [0..] $ case w of
       Words p s w' -> elems w'
 
-tagSystemize :: C.Machine -> Machine
-tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
-    symbols = nub $ map snd $ keys r
+tagSystemize :: C.Machine -> Maybe Integer -> Machine
+tagSystemize (C.Machine (C.Tape lT cT rT) st r e) resultLen = let
+    lastSym = ['_','*']
+    symbols = (++lastSym) $ filter (`notElem`lastSym) $ nub $ map snd $ keys r
     states = filter (/="[End]") $ nub $ map fst $ keys r
     symPP = fromList $ flip zip [1..] symbols
     staPP = fromList $ flip zip [1..] states
@@ -118,7 +121,10 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
     q = fromIntegral $ length states
     bZ = 3*s+3
     cZ = bZ*3
-    z = cZ*(q+2)+1+bZ
+    symBits = ceiling $ logBase 2 $ fromIntegral $ subtract 2 $ length symbols
+    dZ = fromMaybe 0 resultLen * symBits
+    rZ = if isJust resultLen then dZ+bZ else bZ
+    z = cZ*(q+2)+3+rZ
     poi s n d = (concat s,[O n,I,O $ d-n-1])
     st1 q = poi ["[1-",q,"]"] (cZ*sta q+bZ*2) $ 2*z
     st1' q = poi ["[1'-",q,"]"] (cZ*sta q+bZ*2+1) $ 2*z+bZ
@@ -165,7 +171,7 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
               C.Two sp sh -> con [sy sp,sy sh]
             dq = con [ads,ns]
             de = con [di,dq]
-            end = con [ads,poi ["[Done1]"] (2*z-1-bZ) $ 2*z-bZ]
+            end = con [ads,poi ["[Done1]"] (2*z-2-rZ) $ 2*z-rZ]
           in if ws == "[End]"
             then [(idx,end),(ids,end),(idx+1,sy kc),(idx+bZ+1,sy kc)] -- Finish Condition
             else [(idx,de),(ids,dq),(idx+1,sy kc),(idx+bZ+1,sy kc)]
@@ -176,9 +182,19 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) = let
         po = zip [bZ*4,bZ*4+3..] $ con [mu,mu] : map sy symbols
         po2 = [
           (z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4),
-          (2*z-1-bZ,poi ["[Done2]"] (2*z-1) $ 2*z+1)]
-        endf = symbols >>= \s -> if s == '_' then [] else [(2*z-bZ+3*sym s,sy s)]
-      in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2,endf]
+          (2*z-2-rZ,poi ["[Done2]"] (2*z-2) $ 2*z+1)]
+        po3 = if isJust resultLen then [(2*z-2-rZ+1,pad $ 2*z-dZ)] else []
+        binCode s = ("Bin"++show sx++[':',s],) $ reverse $ bC 0 sx where
+          sx = sym s
+          bC d x
+            | d == symBits = []
+            | otherwise = (:bC (d+1) (x`div`2)) $ case x`mod`2 of
+              0 -> O 1
+              1 -> I
+        endf = symbols >>= \s -> if s`elem`lastSym then [] else [(2*z-rZ+3*sym s,sy s)]
+        resf = symbols >>= \s -> if s`elem`lastSym then [] else [(2*z-rZ+3*sym s+1,binCode s)]
+        res' = if isJust resultLen then resf else []
+      in concat [ori1,ori2,ori3,cem1,cem2,cem3,states>>=ori,states>>=cem,trs,ams,po,po2,po3,endf,res']
     ts = cT : rT ++ lT []
     ts' = (2^) $ ceiling $ logBase 2 $ fromIntegral $ length ts
     defTape = snd $ con $ concat [[st1 st],map sy ts,replicate ts' mu]

@@ -1,11 +1,14 @@
+{-# LANGUAGE LambdaCase #-}
+
 import Prelude hiding (log)
 import Control.Monad
+import System.Environment
+import System.IO (isEOF)
+import Data.Map.Strict hiding (null,map,filter)
 import TM as T hiding (step)
 import qualified CTM as C hiding (step)
 import qualified CTS as T hiding (step)
 import Mecha
-import System.Environment
-import Data.Map.Strict hiding (null,map,filter)
 
 got :: String -> Char
 got "_" = ' '
@@ -34,6 +37,9 @@ main :: IO ()
 main = do
   (r,s) <- makeMap "" empty
   t <- getLine
+  outLenStr <- isEOF >>= \case
+    False -> Just <$> getLine
+    True -> return Nothing
   args <- getArgs
   let
     ver = "v"`elem`args
@@ -41,6 +47,8 @@ main = do
     res = "r"`elem`args
     clk = "c"`elem`args
     tag = "t"`elem`args
+    slw = "s"`elem`args
+    fin = "f"`elem`args
     phase = if tag
       then 3
       else if clk
@@ -53,12 +61,14 @@ main = do
       else if ver
         then 1
         else 0
+    le = read . last . words <$> outLenStr
     m = construct t r s
     rm = restrict m
     cm = C.clockwisize rm
-    tm = T.tagSystemize cm
+    tm = T.tagSystemize cm $ (+2) <$> if fin then Nothing else le
+    stepCount = if slw then 1 else 10000000
     inst :: Mecha a => a -> IO ()
-    inst = [proc, trace, putStrLn . stringify] !! mode
+    inst = [proc stepCount, trace, putStrLn . stringify] !! mode
   case phase of
     0 -> inst m
     1 -> inst rm

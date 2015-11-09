@@ -75,3 +75,4 @@ a -> a Start Right
 
 Write
 aaaaaaaa
+Result : 63

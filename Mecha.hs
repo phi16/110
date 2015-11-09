@@ -25,15 +25,15 @@ log (x:xs) r = show x : log xs r
 trace :: Mecha a => a -> IO ()
 trace m = mapM_ putStrLn $ uncurry log $ run m
 
-proc :: Mecha a => a -> IO ()
-proc m = procI m 0 0 where
+proc :: Mecha a => Integer -> a -> IO ()
+proc st m = procI m 0 0 where
   procI m d ds = case eff m of
     Left s -> do
       putStr $ show ds
       print m
       putStrLn s
     Right (n,m') -> do
-      when (d`mod`1==0) $ do
+      when (d`mod`st==0) $ do
         putStr $ show $ ds+n
         print m'
       procI m' (d+1) $! ds+n
