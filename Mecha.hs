@@ -1,9 +1,11 @@
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE BangPatterns #-}
 
 module Mecha where
 
 import Prelude hiding (log)
 import Control.Monad
+import System.IO
 
 class Show a => Mecha a where
   step :: a -> Either String a
@@ -28,12 +30,13 @@ trace m = mapM_ putStrLn $ uncurry log $ run m
 proc :: Mecha a => Integer -> a -> IO ()
 proc st m = procI m 0 0 where
   procI m d ds = case eff m of
-    Left s -> do
+    Left !s -> do
       putStr $ show ds
       print m
       putStrLn s
-    Right (n,m') -> do
+    Right (!n,!m') -> do
       when (d`mod`st==0) $ do
         putStr $ show $ ds+n
         print m'
+        hFlush stdout
       procI m' (d+1) $! ds+n

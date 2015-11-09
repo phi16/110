@@ -67,7 +67,7 @@ main = do
     rm = restrict m
     cm = C.clockwisize rm
     tm = T.tagSystemize cm $ (+2) <$> if fin then Nothing else le
-    stepCount = if slw then 1 else 10000000
+    stepCount = if slw then 1 else 1000000
     inst :: Mecha a => a -> IO ()
     inst = [proc stepCount, trace, putStrLn . stringify] !! mode
   case phase of
