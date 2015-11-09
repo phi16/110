@@ -2,6 +2,7 @@
 
 import Prelude hiding (log)
 import Control.Monad
+import Control.Applicative ((<$>))
 import System.Environment
 import System.IO (isEOF)
 import Data.Map.Strict hiding (null,map,filter)

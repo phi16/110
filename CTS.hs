@@ -182,8 +182,8 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) resultLen = let
         po = zip [bZ*4,bZ*4+3..] $ con [mu,mu] : map sy symbols
         po2 = [
           (z+bZ*4,con [mu,mu]),(bZ*4-1,pad $ 2*z-bZ*4),
-          (2*z-2-rZ,poi ["[Done2]"] (2*z-2) $ 2*z+1)]
-        po3 = if isJust resultLen then [(2*z-2-rZ+1,pad $ 2*z-dZ)] else []
+          (2*z-2-rZ,poi ["[Done2]"] (2*z-1) $ 2*z+1)]
+        po3 = if isJust resultLen then [(2*z-2-rZ+1,pad $ 2*z+bZ-6)] else []
         binCode s = ("Bin"++show sx++[':',s],) $ reverse $ bC 0 sx where
           sx = sym s
           bC d x
