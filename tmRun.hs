@@ -10,6 +10,7 @@ import Data.Map.Strict hiding (null,map,filter)
 import TM as T hiding (step)
 import qualified CTM as C hiding (step)
 import qualified CTS as T hiding (step)
+import qualified CA as A hiding (step)
 import Mecha
 
 got :: String -> Char
@@ -81,17 +82,20 @@ runTM hdl args = do
     clk = "c"`elem`args
     tag = "t"`elem`args
     ver = "v"`elem`args
+    aut = "a"`elem`args
     out = "o"`elem`args
     slw = "s"`elem`args
     fin = "f"`elem`args
     ini = "i"`elem`args
-    phase = if tag
-      then 3
-      else if clk
-        then 2
-        else if res
-          then 1
-          else 0
+    phase = if aut
+      then 4
+      else if tag
+        then 3
+        else if clk
+          then 2
+          else if res
+            then 1
+            else 0
     mode = if out
       then 2
       else if ver
@@ -102,6 +106,7 @@ runTM hdl args = do
     rm = restrict m
     cm = C.clockwisize rm
     tm = T.tagSystemize cm ini $ (+2) <$> if fin then Nothing else le
+    am = A.automatonize tm
     stepCount = if slw then 1 else 1000000
     inst :: Mecha a => a -> IO ()
     inst = [proc stepCount, trace, putStrLn . stringify] !! mode
@@ -110,3 +115,4 @@ runTM hdl args = do
     1 -> inst rm
     2 -> inst cm
     3 -> inst tm
+    4 -> inst am
