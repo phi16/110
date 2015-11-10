@@ -102,8 +102,8 @@ instance M.Mecha Machine where
     ws = map (\(z,(a,b)) -> concat[show z," : ",a," - ",show b]) $ zip [0..] $ case w of
       Words p s w' -> elems w'
 
-tagSystemize :: C.Machine -> Maybe Integer -> Machine
-tagSystemize (C.Machine (C.Tape lT cT rT) st r e) resultLen = let
+tagSystemize :: C.Machine -> Bool -> Maybe Integer -> Machine
+tagSystemize (C.Machine (C.Tape lT cT rT) st r e) ini resultLen = let
     lastSym = ['_','*']
     symbols = (++lastSym) $ filter (`notElem`lastSym) $ nub $ map snd $ keys r
     states = filter (/="[End]") $ nub $ map fst $ keys r
@@ -199,4 +199,6 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) resultLen = let
     ts' = (2^) $ ceiling $ logBase 2 $ fromIntegral $ length ts
     defTape = snd $ con $ concat [[st1 st],map sy ts,replicate ts' mu]
     resPats = ixmap (0,2*z-1) pred $ eArray // changes
-  in construct [I] $ resPats // [(0,("[InitTape]",defTape))]
+  in if ini
+    then construct defTape $ eArray // changes
+    else construct [I] $ resPats // [(0,("[InitTape]",defTape))]

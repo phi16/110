@@ -61,8 +61,8 @@ dispHelp = mapM_ putStrLn [
   "- c : Clockwise Turing Machine",
   "- t : Cyclic Tag System",
   "-- f : Don't create binaryEncoding",
+  "-- i : Don't eliminate initialTape",
   "-- s : Efficient but 1Step",
-  "- g : Glider System",
   "- a : Rule 110 Automaton",
   "Running Option",
   "- o : Output Machine",
@@ -77,13 +77,14 @@ runTM hdl args = do
     True -> return Nothing
   hClose hdl
   let
-    ver = "v"`elem`args
-    out = "o"`elem`args
     res = "r"`elem`args
     clk = "c"`elem`args
     tag = "t"`elem`args
+    ver = "v"`elem`args
+    out = "o"`elem`args
     slw = "s"`elem`args
     fin = "f"`elem`args
+    ini = "i"`elem`args
     phase = if tag
       then 3
       else if clk
@@ -100,7 +101,7 @@ runTM hdl args = do
     m = construct t r s
     rm = restrict m
     cm = C.clockwisize rm
-    tm = T.tagSystemize cm $ (+2) <$> if fin then Nothing else le
+    tm = T.tagSystemize cm ini $ (+2) <$> if fin then Nothing else le
     stepCount = if slw then 1 else 1000000
     inst :: Mecha a => a -> IO ()
     inst = [proc stepCount, trace, putStrLn . stringify] !! mode
