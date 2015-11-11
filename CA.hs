@@ -64,7 +64,7 @@ a4F2 = mulZ [(1,a42),(27,e),(1,a41),(23,e),(1,a43),(25,e),(1,a42)]
 a4F3 = mulZ [(1,a43),(27,e),(1,a42),(23,e),(1,a41),(25,e),(1,a43)]
 clock = mulZ [(649,e),(1,a4F2),(649,e),(1,a4F1),(649,e),(1,a4F3)]
 leftUnit :: Integer -> SizeTape
-leftUnit d = mulZ [(217,e),(d`div`3+1,clock)]
+leftUnit d = mulZ [(217,e),(d`div`3+1,clock),(216,e)]
 
 a3, c2A1, c2B2, ele :: SizeTape
 a3 = convert "111110111000100110"
@@ -72,7 +72,7 @@ c2A1 = convert "11111000000100110"
 c2B2 = convert "11111000111011010"
 ele = mulZ [(1,c2A1),(2,e),(1,c2A1),(2,e),(1,c2A1),(1,e),(1,c2B2)]
 centerUnit :: SizeTape
-centerUnit = mulZ [(216,e),(1,ele),(1,e),(1,a3)]
+centerUnit = mconcat [ele,e,a3]
 
 e5, e2, e4 :: [SizeTape]
 e5R, e2R, e4R :: Integer -> SizeTape
@@ -133,29 +133,34 @@ e'R :: Integer -> SizeTape
 e' = map convert [
   "111110000100011111010",
   "111110001000110011000",
-  "011101110011000100110", --
-  "111011011101011100110", --
+  "011101110011000100110",
+  "111011011101011100110",
   "111110111111011111010",
+
   "111110001110000111000",
-  "100011010011000100110", --
-  "111110011111011100110", --
+  "100011010011000100110",
+  "111110011111011100110",
   "111110001011000111010",
   "111110001001111100110",
-  "110001011111000100110", --
+
+  "110001011111000100110",
   "111111001111000100110",
   "111110000101100100110",
   "111110001000111110110",
   "011000111111000100110",
+
   "111011100110000100110",
   "111110111010111000110",
   "111110001110111110100",
   "111000111011000100110",
   "111110100110111100110",
+
   "111110001110111110010",
   "111000101111000100110",
   "111110100111100100110",
   "111110001110110010110",
   "111101111111000100110",
+
   "111110011100000100110",
   "111110001011010000110",
   "111110001001111111000",
@@ -163,12 +168,26 @@ e' = map convert [
   "111111000011011100110"]
 e'R x = e' !! (fromIntegral x`mod`30)
 
+mergeE' :: Integer -> [Integer] -> [[Integer]] -> SizeTape
+mergeE' d xs tbl = m (fromIntegral $ d`mod`30) $ map (e'R.(+d)) xs where
+  m n xs = zipEther (map (flip mult e) $ tbl!!n) xs
+  zipEther xs [] = mconcat xs
+  zipEther (x:xs) (y:ys) = x`mappend`y`mappend`zipEther xs ys
 initUnit :: Integer -> SizeTape
-initUnit d = mconcat [e,e,e,e,e,
-  e5R $ 9+d,e2R $ 6+d,e,e,e,e4R $ 9+d,e,e,e'R $ 2+d,e,e'R $ 6+d,e,e,e'R $ 10+d,e,e'R $ 7+d,e,e,e'R $ 3+d,e,
-  e,e,e,e,e]
+initUnit d = mconcat [e5R $ 9+d,e2R $ 6+d,e,e,e,e4R $ 9+d,e's] where
+  e's = mergeE' d [2,6,10,7,3] $ map (++[5]) $ [
+    [2,1,2,0,2],[1,1,2,0,2],[1,1,2,0,2],
+    [1,1,2,1,2],[2,1,2,0,2],[1,1,2,0,2],
+    [1,1,2,0,2],[1,1,2,1,2],[2,1,2,0,2],
+    [1,1,2,0,2],[1,1,2,0,2],[1,1,3,0,2],
+    [2,1,2,0,2],[1,1,2,0,2],[1,1,3,0,1],
+    [1,2,2,0,2],[1,1,2,0,2],[1,1,2,1,1],
+    [1,2,2,0,2],[2,1,2,0,2],[1,1,2,0,2],
+    [1,1,2,1,2],[2,1,2,0,2],[2,1,2,0,2],
+    [1,1,2,0,2],[1,1,2,1,2],[2,1,2,0,2],
+    [2,1,2,0,2],[1,1,2,0,2],[1,1,2,1,2]]
 rightUnit :: Integer -> SizeTape
 rightUnit d = mempty
 
 automatonize :: Integer -> T.Machine -> Machine
-automatonize d ts = Machine $ mconcat $ map initUnit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
+automatonize d ts = Machine $ mconcat $ map initUnit [14..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
