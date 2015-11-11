@@ -86,3 +86,4 @@ $ -> _ End2 Left
 Write
 aaaaaaaa
 Result : 68
+Step : 7685721322805

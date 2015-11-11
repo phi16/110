@@ -7,6 +7,7 @@ import System.Environment
 import System.Directory
 import System.IO
 import Data.Map.Strict hiding (null,map,filter)
+import Data.Maybe (fromMaybe)
 import TM as T hiding (step)
 import qualified CTM as C hiding (step)
 import qualified CTS as T hiding (step)
@@ -73,9 +74,12 @@ runTM :: Handle -> [String] -> IO ()
 runTM hdl args = do
   (r,s) <- makeMap hdl "" empty
   t <- hGetLine hdl
-  outLenStr <- hIsEOF hdl >>= \case
-    False -> Just <$> hGetLine hdl
-    True -> return Nothing
+  let
+    maybeGetLine = hIsEOF hdl >>= \case
+      False -> Just <$> hGetLine hdl
+      True -> return Nothing
+  outLenStr <- maybeGetLine
+  stepLenStr <- maybeGetLine
   hClose hdl
   let
     res = "r"`elem`args
@@ -102,11 +106,12 @@ runTM hdl args = do
         then 1
         else 0
     le = read . last . words <$> outLenStr
+    slen = read . last . words <$> stepLenStr
     m = construct t r s
     rm = restrict m
     cm = C.clockwisize rm
     tm = T.tagSystemize cm ini $ (+2) <$> if fin then Nothing else le
-    am = A.automatonize tm
+    am = A.automatonize (fromMaybe 6 slen) tm
     stepCount = if slw then 1 else 1000000
     inst :: Mecha a => a -> IO ()
     inst = [proc stepCount, trace, putStrLn . stringify] !! mode

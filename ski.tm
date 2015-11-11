@@ -586,3 +586,4 @@ _ -> @ Start Left
 Write
 ```s`k``sii``s``s`ksk`k``sii`k`sk
 Result : 3
+Step : 4792741920320828
