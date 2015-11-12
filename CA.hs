@@ -9,7 +9,7 @@ import Prelude hiding (log,lookup)
 import Data.Monoid
 import Data.List (genericLength)
 
-data Binary = O | I deriving Eq
+data Binary = O | I | So | Si deriving Eq
 data SizeTape = Tape !Integer ![Binary]
 data Machine = Machine SizeTape
 
@@ -38,7 +38,14 @@ instance M.Mecha Machine where
 
 instance Monoid SizeTape where
   mempty = Tape 0 []
-  mappend (Tape x xs) (Tape y ys) = Tape (x+y) (xs++ys)
+  mappend (Tape x xs) (Tape y ys) = Tape (x+y) $ simpl $ xs++ys where
+    simpl [] = []
+    simpl (x:xs) = case simpl xs of
+      [] -> [x]
+      (So:ys) -> if x == O then ys else x:So:ys
+      (Si:ys) -> if x == I then ys else x:Si:ys
+      (O:ys) -> if x == So then ys else x:O:ys
+      (I:ys) -> if x == Si then ys else x:I:ys
 
 convert :: String -> SizeTape
 convert l = Tape (genericLength l) $ flip map l $ \case
@@ -47,7 +54,9 @@ convert l = Tape (genericLength l) $ flip map l $ \case
 
 repli :: Integer -> [Binary] -> [Binary]
 repli 0 xs = []
-repli n xs = xs ++ repli (n-1) xs
+repli n xs
+  | n > 0 = xs ++ repli (n-1) xs
+  | n < 0 = [So,Si,Si,So,So,Si,So, So,So,Si,Si,Si,Si,Si] ++ repli (n+1) []
 
 mult :: Integer -> SizeTape -> SizeTape
 mult n (Tape t ts) = Tape (t*n) $ repli n ts
@@ -143,11 +152,11 @@ e' = map convert [
   "111110001011000111010",
   "111110001001111100110",
 
-  "110001011111000100110",
+  "1100010",
   "111111001111000100110",
   "111110000101100100110",
   "111110001000111110110",
-  "011000111111000100110",
+  "0110001",
 
   "111011100110000100110",
   "111110111010111000110",
@@ -159,7 +168,7 @@ e' = map convert [
   "111000101111000100110",
   "111110100111100100110",
   "111110001110110010110",
-  "111101111111000100110",
+  "1111011",
 
   "111110011100000100110",
   "111110001011010000110",
@@ -175,7 +184,7 @@ mergeE' d xs tbl = m (fromIntegral $ d`mod`30) $ map (e'R.(+d)) xs where
   zipEther (x:xs) (y:ys) = x`mappend`y`mappend`zipEther xs ys
 initUnit :: Integer -> SizeTape
 initUnit d = mconcat [e5R $ 9+d,e2R $ 6+d,e,e,e,e4R $ 9+d,e's] where
-  e's = mergeE' d [2,6,10,7,3] $ map (++[5]) $ [
+  e's = mergeE' d [2,6,10,7,3] $ [
     [2,1,2,0,2],[1,1,2,0,2],[1,1,2,0,2],
     [1,1,2,1,2],[2,1,2,0,2],[1,1,2,0,2],
     [1,1,2,0,2],[1,1,2,1,2],[2,1,2,0,2],
@@ -186,8 +195,26 @@ initUnit d = mconcat [e5R $ 9+d,e2R $ 6+d,e,e,e,e4R $ 9+d,e's] where
     [1,1,2,1,2],[2,1,2,0,2],[2,1,2,0,2],
     [1,1,2,0,2],[1,1,2,1,2],[2,1,2,0,2],
     [2,1,2,0,2],[1,1,2,0,2],[1,1,2,1,2]]
+block1PUnit :: Integer -> SizeTape
+block1PUnit d = mergeE' d [11,17,18,26,29,25,3,15,26,4,7,3] tbl where
+  tbl = map (++[20]) $ map (zipWith (+) [0,0,2,0,2,2,0,2,0,0,2,2]) $ [
+    [0,0,0,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
+    [0,1,-1,1,-1,0,0,0,1,0,-1,0],[0,1,0,0,0,0,0,0,0,0,0,1],
+    [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
+    [0,1,0,1,-1,0,0,1,0,0,0,0],[0,1,0,0,0,0,0,1,0,0,0,1],
+    [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,1,0,0,0,0],
+    [0,0,0,0,-1,0,0,1,0,0,0,0],[0,1,-1,0,0,1,0,1,0,0,0,0],
+    [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,1,-1,0,0,0],
+    [0,0,0,0,0,0,0,1,0,1,0,-1],[0,1,-1,0,0,1,1,0,0,0,0,0],
+    [0,1,-1,0,0,0,0,0,0,0,0,0],[0,0,-1,0,0,0,0,1,-1,1,0,0],
+    [0,0,0,0,0,0,1,0,0,1,0,0],[0,1,-1,0,0,0,1,0,0,0,0,0],
+    [0,1,-1,0,0,0,0,0,0,1,0,0],[0,0,-1,0,0,0,1,1,-1,1,0,0],
+    [0,0,0,1,0,-1,1,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0,0,0],
+    [0,1,-1,0,0,0,0,0,0,1,-1,0],[0,0,-1,1,0,0,1,0,1,0,0,0],
+    [0,0,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0,0,0],
+    [0,1,-1,1,0,0,0,0,1,1,-1,0],[0,1,-1,1,0,0,1,0,1,0,0,0]]
 rightUnit :: Integer -> SizeTape
 rightUnit d = mempty
 
 automatonize :: Integer -> T.Machine -> Machine
-automatonize d ts = Machine $ mconcat $ map initUnit [14..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
+automatonize d ts = Machine $ mconcat $ mult 20 e : map block1PUnit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
