@@ -46,7 +46,7 @@ instance Monoid SizeTape where
       (Si:ys) -> if x == I then ys else x:Si:ys
       (O:ys) -> if x == So then ys else x:O:ys
       (I:ys) -> if x == Si then ys else x:I:ys
-
+ 
 convert :: String -> SizeTape
 convert l = Tape (genericLength l) $ flip map l $ \case
   '0' -> O
@@ -231,8 +231,12 @@ block1SUnit d = mergeE' d [25,7,18,26,29,25,3,15,26,4,7,3] tbl where
     [0,1,-1,0,0,0,0,0,0,1,-1,0],[0,2,-2,1,0,0,1,0,1,0,0,0],
     [0,1,-1,1,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,-1,1,0,0,0,0,1,1,-1,0],[0,2,-2,1,0,0,1,0,1,0,0,0]]
+block0Unit :: Integer -> SizeTape
+block0Unit d = mergeE' d [19,1,12,20,23,19,3,15,26,4,7,3] tbl where
+  tbl = map (++[20]) $ map (zipWith (+) [0,2,0,0,2,2,2,2,0,0,2,2]) $ [
+    [0,0,0,0,0,0,0,0,0,0,0,0]] ++ repeat [0,0,0,0,0,0,0,0,0,0,0,0]
 rightUnit :: Integer -> SizeTape
 rightUnit d = mempty
 
 automatonize :: Integer -> T.Machine -> Machine
-automatonize d ts = Machine $ mconcat $ mult 20 e : map block1SUnit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
+automatonize d ts = Machine $ mconcat $ mult 20 e : map block0Unit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
