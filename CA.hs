@@ -5,8 +5,9 @@ module CA where
 
 import qualified CTS as T
 import qualified Mecha as M
-import Prelude hiding (log,lookup)
+import Prelude hiding (log,lookup,words)
 import Data.Monoid
+import Data.Array
 import Data.List (genericLength)
 
 data Binary = O | I | So | Si deriving Eq
@@ -215,7 +216,7 @@ block1PUnit d = mergeE' d [11,17,18,26,29,25,3,15,26,4,7,3] tbl where
     [0,1,-1,1,0,0,0,0,1,1,-1,0],[0,1,-1,1,0,0,1,0,1,0,0,0]]
 block1SUnit :: Integer -> SizeTape
 block1SUnit d = mergeE' d [25,7,18,26,29,25,3,15,26,4,7,3] tbl where
-  tbl = map (++[20]) $ map (zipWith (+) [0,1,1,0,2,2,0,2,0,0,2,2]) $ [
+  tbl = map (zipWith (+) [0,1,1,0,2,2,0,2,0,0,2,2]) $ [
     [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,-1,1,-1,0,0,0,1,0,-1,0],[0,1,0,0,0,0,0,0,0,0,0,1],
     [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
@@ -233,7 +234,7 @@ block1SUnit d = mergeE' d [25,7,18,26,29,25,3,15,26,4,7,3] tbl where
     [0,1,-1,1,0,0,0,0,1,1,-1,0],[0,2,-2,1,0,0,1,0,1,0,0,0]]
 block0Unit :: Integer -> SizeTape
 block0Unit d = mergeE' d [19,1,12,20,23,19,3,15,26,4,7,3] tbl where
-  tbl = map (++[20]) $ map (zipWith (+) [0,2,0,0,2,2,2,2,0,0,2,2]) $ [
+  tbl = map (zipWith (+) [0,2,0,0,2,2,2,2,0,0,2,2]) $ [
     [0,0,0,0,0,0,0,0,0,0,0,0],[0,1,-1,1,0,0,0,0,0,0,0,0],
     [0,0,0,1,0,0,-1,0,1,0,-1,0],[0,0,0,0,0,0,0,0,0,0,0,1],
     [0,0,0,1,0,0,0,0,0,0,0,0,0],[0,1,-1,1,0,0,0,0,0,0,0,0],
@@ -249,8 +250,55 @@ block0Unit d = mergeE' d [19,1,12,20,23,19,3,15,26,4,7,3] tbl where
     [0,1,0,0,0,0,0,0,0,1,-1,0],[0,1,0,0,0,0,1,0,1,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,0,1,0,-1,0,0,1,1,-1,0],[0,0,0,0,0,0,0,0,1,0,0,0]]
-rightUnit :: Integer -> SizeTape
-rightUnit d = mconcat [initUnit 0, block1PUnit 0, initUnit 0, block1PUnit 0]
+data State a = State {runState :: Integer -> (Integer, a)}
+instance Functor State where
+  fmap f (State u) = State $ \i -> fmap f $ u i
+instance Applicative State where
+  pure x = State $ \i -> (i,x)
+  State f <*> State x = State $ \i -> let
+      (j,f') = f i
+      (k,x') = x j
+    in (k,f' x')
+instance Monad State where
+  return x = State $ \i -> (i,x)
+  State y >>= f = State $ \i -> let
+      (j,y') = y i
+    in runState (f y') j
+increment :: Integer -> State Integer
+increment d = State $ \i -> ((i+d)`mod`30,i)
+iniU :: State SizeTape
+bSU,bPU :: T.Binary -> State SizeTape
+iniU = do
+  d <- increment 0
+  return $ initUnit d
+bPU T.I = do
+  d <- increment 0
+  return $ block1PUnit d
+bPU (T.O n) = do
+  d <- increment 0
+  return $ block0Unit $ d+22
+bSU T.I = do
+  d <- increment 0
+  return $ block1SUnit $ d+8
+bSU e = bPU e
+periodUnit :: [T.Binary] -> State SizeTape
+periodUnit a = do
+  i <- iniU
+  is <- case a of
+    [] -> return mempty
+    (au:as) -> (:) <$> bPU au <*> mapM bSU as
+  return $ mconcat $ i:is
+rightUnit :: Integer -> [[T.Binary]] -> SizeTape
+rightUnit d a = snd $ runState (seq d $ cycle a) 0 where
+  seq 0 _ = return mempty
+  seq n (y:ys) = do
+    x <- periodUnit y
+    xs <- seq (n-1) ys
+    return $ x`mappend`xs
 
 automatonize :: Integer -> T.Machine -> Machine
-automatonize d ts = Machine $ mconcat $ mult 20 e : map initUnit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
+automatonize d (T.Machine _ ws) = Machine $ mconcat [le,ce,re] where
+  le = leftUnit d
+  ce = centerUnit
+  re = rightUnit d $ [[T.I],[T.I,T.O 1,T.I]]
+  -- re = rightUnit d (T.wSize ws) $ fmap snd $ T.words ws
