@@ -9,6 +9,7 @@ import Prelude hiding (log,lookup,words)
 import Data.Monoid
 import Data.Array
 import Data.List (genericLength)
+import Control.Applicative
 
 data Binary = O | I | So | Si deriving Eq
 data SizeTape = Tape !Integer ![Binary]
@@ -198,8 +199,8 @@ initUnit d = mconcat [e5R $ 9+d,e2R $ 6+d,e,e,e,e4R $ 9+d,e's] where
     [2,1,2,0,2],[1,1,2,0,2],[1,1,2,1,2]]
 block1PUnit :: Integer -> SizeTape
 block1PUnit d = mergeE' d [11,17,18,26,29,25,3,15,26,4,7,3] tbl where
-  tbl = map (zipWith (+) [0,0,2,0,2,2,0,2,0,0,2,2]) $ [
-    [0,0,0,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
+  tbl = map (zipWith (+) [0,0,2,0,2,2,0,2,0,0,2,2,0]) $ [
+    [0,0,0,0,0,0,0,0,0,0,0,0,1],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,-1,1,-1,0,0,0,1,0,-1,0],[0,1,0,0,0,0,0,0,0,0,0,1],
     [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,0,1,-1,0,0,1,0,0,0,0],[0,1,0,0,0,0,0,1,0,0,0,1],
@@ -216,7 +217,7 @@ block1PUnit d = mergeE' d [11,17,18,26,29,25,3,15,26,4,7,3] tbl where
     [0,1,-1,1,0,0,0,0,1,1,-1,0],[0,1,-1,1,0,0,1,0,1,0,0,0]]
 block1SUnit :: Integer -> SizeTape
 block1SUnit d = mergeE' d [25,7,18,26,29,25,3,15,26,4,7,3] tbl where
-  tbl = map (zipWith (+) [0,1,1,0,2,2,0,2,0,0,2,2]) $ [
+  tbl = map (zipWith (+) [1,1,1,0,2,2,0,2,0,0,2,2]) $ [
     [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,-1,1,-1,0,0,0,1,0,-1,0],[0,1,0,0,0,0,0,0,0,0,0,1],
     [0,1,-1,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
@@ -228,7 +229,7 @@ block1SUnit d = mergeE' d [25,7,18,26,29,25,3,15,26,4,7,3] tbl where
     [0,1,-1,0,0,0,0,0,0,0,0,0],[0,2,-1,0,0,0,0,1,-1,1,0,0],
     [0,2,-1,0,0,0,1,0,0,1,0,0],[0,2,-1,0,0,0,1,0,0,0,0,0],
     [0,1,-1,0,0,0,0,0,0,1,0,0],[0,2,-2,0,0,0,1,1,-1,1,0,0],
-    [0,2,-1,1,0,-1,1,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
+    [-1,2,-1,1,0,-1,1,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,-1,0,0,0,0,0,0,1,-1,0],[0,2,-2,1,0,0,1,0,1,0,0,0],
     [0,1,-1,1,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,-1,1,0,0,0,0,1,1,-1,0],[0,2,-2,1,0,0,1,0,1,0,0,0]]
@@ -270,19 +271,19 @@ iniU :: State SizeTape
 bSU,bPU :: T.Binary -> State SizeTape
 iniU = do
   d <- increment 12
-  return $ initUnit (d+12)
+  return $ mult 4 e`mappend`initUnit (d+12)
 bPU T.I = do
   d <- increment 18
-  return $ block1PUnit d
+  return $ mult 4 e`mappend`block1PUnit d
 bPU (T.O n) = do
   d <- increment 4
-  return $ block0Unit $ d+22
+  return $ mult 4 e`mappend`block0Unit (d+22)
 bSU T.I = do
-  d <- increment 1
+  d <- increment 4
   return $ mult 4 e`mappend`block1SUnit (d+22)
 bSU (T.O n) = do
-  d <- increment 16
-  return $ block0Unit $ d+4
+  d <- increment 13
+  return $ mult 4 e`mappend`block0Unit (d+4)
 periodUnit :: [T.Binary] -> State SizeTape
 periodUnit a = do
   i <- iniU
@@ -302,5 +303,5 @@ automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine _ ws) = Machine $ mconcat [le,ce,re] where
   le = leftUnit d
   ce = centerUnit
-  re = rightUnit d $ [[T.I]]
+  re = rightUnit d $ [replicate 60 $ T.I]
   -- re = rightUnit d (T.wSize ws) $ fmap snd $ T.words ws
