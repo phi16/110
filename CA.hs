@@ -185,14 +185,14 @@ mergeE' d xs tbl = m (fromIntegral $ d`mod`30) $ map (e'R.(+d)) xs where
 initUnit :: Integer -> SizeTape
 initUnit d = mconcat [e5R $ 9+d,e2R $ 6+d,e,e,e,e4R $ 9+d,e's] where
   e's = mergeE' d [2,6,10,7,3] $ [
-    [2,1,2,0,2],[1,1,2,0,2],[1,1,2,0,2],
-    [1,1,2,1,2],[2,1,2,0,2],[1,1,2,0,2],
-    [1,1,2,0,2],[1,1,2,1,2],[2,1,2,0,2],
+    [2,1,2,1,2],[1,1,2,0,2],[1,1,2,0,2],
+    [1,1,2,1,3],[2,1,3,1,2],[1,1,2,0,2],
+    [1,1,2,0,2],[1,1,2,1,3],[2,2,3,0,2],
     [1,1,2,0,2],[1,1,2,0,2],[1,1,3,0,2],
-    [2,1,2,0,2],[1,1,2,0,2],[1,1,3,0,1],
-    [1,2,2,0,2],[1,1,2,0,2],[1,1,2,1,1],
-    [1,2,2,0,2],[2,1,2,0,2],[1,1,2,0,2],
-    [1,1,2,1,2],[2,1,2,0,2],[2,1,2,0,2],
+    [2,2,2,0,2],[1,1,2,0,2],[1,1,3,1,1],
+    [1,2,2,0,2],[1,1,2,0,2],[1,1,2,1,2],
+    [1,2,3,0,2],[2,1,2,0,2],[1,1,2,0,2],
+    [1,1,2,1,2],[2,2,2,0,2],[2,1,2,0,2],
     [1,1,2,0,2],[1,1,2,1,2],[2,1,2,0,2],
     [2,1,2,0,2],[1,1,2,0,2],[1,1,2,1,2]]
 block1PUnit :: Integer -> SizeTape
@@ -250,7 +250,7 @@ block0Unit d = mergeE' d [19,1,12,20,23,19,3,15,26,4,7,3] tbl where
     [0,0,0,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,0,1,0,-1,0,0,1,1,-1,0],[0,0,0,0,0,0,0,0,1,0,0,0]]
 rightUnit :: Integer -> SizeTape
-rightUnit d = mempty
+rightUnit d = mconcat [initUnit 0, block1PUnit 0, initUnit 0, block1PUnit 0]
 
 automatonize :: Integer -> T.Machine -> Machine
-automatonize d ts = Machine $ mconcat $ mult 20 e : map block0Unit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
+automatonize d ts = Machine $ mconcat $ mult 20 e : map initUnit [0..29] -- mconcat [leftUnit d, centerUnit, rightUnit d]
