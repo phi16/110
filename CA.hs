@@ -269,20 +269,20 @@ increment d = State $ \i -> ((i+d)`mod`30,i)
 iniU :: State SizeTape
 bSU,bPU :: T.Binary -> State SizeTape
 iniU = do
-  d <- increment 0
-  return $ initUnit d
+  d <- increment 12
+  return $ initUnit (d+12)
 bPU T.I = do
   d <- increment 18
   return $ block1PUnit d
 bPU (T.O n) = do
   d <- increment 4
-  return $ block0Unit (d+22)
+  return $ block0Unit $ d+22
 bSU T.I = do
   d <- increment 1
-  return $ block1SUnit (d+22)
+  return $ mult 4 e`mappend`block1SUnit (d+22)
 bSU (T.O n) = do
   d <- increment 16
-  return $ block0Unit (d+4)
+  return $ block0Unit $ d+4
 periodUnit :: [T.Binary] -> State SizeTape
 periodUnit a = do
   i <- iniU
@@ -291,7 +291,7 @@ periodUnit a = do
     (au:as) -> (:) <$> bPU au <*> mapM bSU as
   return $ mconcat $ i:is
 rightUnit :: Integer -> [[T.Binary]] -> SizeTape
-rightUnit d a = snd $ runState (seq d $ cycle a) 0 where
+rightUnit d a = snd $ runState (seq d $ cycle a) 18 where
   seq 0 _ = return mempty
   seq n (y:ys) = do
     x <- periodUnit y
@@ -302,5 +302,5 @@ automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine _ ws) = Machine $ mconcat [le,ce,re] where
   le = leftUnit d
   ce = centerUnit
-  re = rightUnit d $ [[T.I],[T.I,T.O 1,T.I]]
+  re = rightUnit d $ [[T.I]]
   -- re = rightUnit d (T.wSize ws) $ fmap snd $ T.words ws
