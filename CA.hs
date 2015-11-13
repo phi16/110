@@ -272,15 +272,17 @@ iniU = do
   d <- increment 0
   return $ initUnit d
 bPU T.I = do
-  d <- increment 0
+  d <- increment 18
   return $ block1PUnit d
 bPU (T.O n) = do
-  d <- increment 0
-  return $ block0Unit $ d+22
+  d <- increment 4
+  return $ block0Unit (d+22)
 bSU T.I = do
-  d <- increment 0
-  return $ block1SUnit $ d+8
-bSU e = bPU e
+  d <- increment 1
+  return $ block1SUnit (d+22)
+bSU (T.O n) = do
+  d <- increment 16
+  return $ block0Unit (d+4)
 periodUnit :: [T.Binary] -> State SizeTape
 periodUnit a = do
   i <- iniU
