@@ -267,23 +267,25 @@ instance Monad State where
     in runState (f y') j
 increment :: Integer -> State Integer
 increment d = State $ \i -> ((i+d)`mod`30,i)
+initIx :: Integer
+initIx = 12
 iniU :: State SizeTape
 bSU,bPU :: T.Binary -> State SizeTape
 iniU = do
-  d <- increment 12
-  return $ mult 4 e`mappend`initUnit (d+12)
+  d <- increment initIx
+  return $ mult 3 e`mappend`initUnit (d+30-initIx)
 bPU T.I = do
   d <- increment 18
-  return $ mult 4 e`mappend`block1PUnit d
+  return $ mult 4 e`mappend`block1PUnit (d+6)
 bPU (T.O n) = do
   d <- increment 4
   return $ mult 4 e`mappend`block0Unit (d+22)
 bSU T.I = do
-  d <- increment 4
-  return $ mult 4 e`mappend`block1SUnit (d+22)
+  d <- increment 7
+  return $ mult 3 e`mappend`block1SUnit (d+10)`mappend`mult 1 e
 bSU (T.O n) = do
-  d <- increment 13
-  return $ mult 4 e`mappend`block0Unit (d+4)
+  d <- increment 16
+  return $ mult 3 e`mappend`block0Unit (d+10)
 periodUnit :: [T.Binary] -> State SizeTape
 periodUnit a = do
   i <- iniU
@@ -292,7 +294,7 @@ periodUnit a = do
     (au:as) -> (:) <$> bPU au <*> mapM bSU as
   return $ mconcat $ i:is
 rightUnit :: Integer -> [[T.Binary]] -> SizeTape
-rightUnit d a = snd $ runState (seq d $ cycle a) 18 where
+rightUnit d a = snd $ runState (seq d $ cycle a) initIx where
   seq 0 _ = return mempty
   seq n (y:ys) = do
     x <- periodUnit y
@@ -302,6 +304,6 @@ rightUnit d a = snd $ runState (seq d $ cycle a) 18 where
 automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine _ ws) = Machine $ mconcat [le,ce,re] where
   le = leftUnit d
-  ce = centerUnit
-  re = rightUnit d $ [replicate 60 $ T.I]
+  ce = centerUnit`mappend`mult 1 e
+  re = rightUnit d $ [[T.I],[T.I]]
   -- re = rightUnit d (T.wSize ws) $ fmap snd $ T.words ws
