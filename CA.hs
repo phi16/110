@@ -251,6 +251,26 @@ block0Unit d = mergeE' d [19,1,12,20,23,19,3,15,26,4,7,3] tbl where
     [0,1,0,0,0,0,0,0,0,1,-1,0],[0,1,0,0,0,0,1,0,1,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0],[0,1,-1,0,0,0,0,0,0,0,0,0],
     [0,1,0,1,0,-1,0,0,1,1,-1,0],[0,0,0,0,0,0,0,0,1,0,0,0]]
+data ElemType = InitElem Integer
+              | IPElem Integer
+              | ISElem Integer
+              | OElem Integer
+  deriving (Eq, Ord, Show)
+instance Enum ElemType where
+  toEnum x
+    | x < 30 = InitElem $ fromIntegral x
+    | x < 60 = IPElem $ fromIntegral x-30
+    | x < 90 = ISElem $ fromIntegral x-60
+    | x < 120 = OElem $ fromIntegral x-90
+  fromEnum (InitElem x) = fromIntegral x
+  fromEnum (IPElem x) = 30 + fromIntegral x
+  fromEnum (ISElem x) = 60 + fromIntegral x
+  fromEnum (OElem x) = 90 + fromIntegral x
+instance Ix ElemType where
+  range (x,y) = [x..y]
+  index (p,q) r = fromEnum r - fromEnum p
+  inRange (p,q) r = p <= r && r <= q
+
 data State a = State {runState :: Integer -> (Integer, a)}
 instance Functor State where
   fmap f (State u) = State $ \i -> fmap f $ u i
@@ -269,32 +289,61 @@ increment :: Integer -> State Integer
 increment d = State $ \i -> ((i+d)`mod`30,i)
 initIx :: Integer
 initIx = 12
-iniU :: State SizeTape
-bSU,bPU :: T.Binary -> State SizeTape
+iniU :: State ElemType
+bSU,bPU :: T.Binary -> State ElemType
 iniU = do
   d <- increment initIx
-  return $ mult 3 e`mappend`initUnit (d+30-initIx)
+  return $ InitElem $ d+30-initIx
 bPU T.I = do
   d <- increment 18
-  return $ mult 4 e`mappend`block1PUnit (d+6)
+  return $ IPElem $ d+6
 bPU (T.O n) = do
   d <- increment 4
-  return $ mult 4 e`mappend`block0Unit (d+22)
+  return $ OElem $ d+22
 bSU T.I = do
   d <- increment 7
-  return $ mult 3 e`mappend`block1SUnit (d+10)`mappend`mult 1 e
+  return $ ISElem $ d+10
 bSU (T.O n) = do
   d <- increment 16
-  return $ mult 3 e`mappend`block0Unit (d+10)
-periodUnit :: [T.Binary] -> State SizeTape
+  return $ OElem $ d+10
+periodUnit :: [T.Binary] -> State [ElemType]
 periodUnit a = do
   i <- iniU
   is <- case a of
     [] -> return mempty
     (au:as) -> (:) <$> bPU au <*> mapM bSU as
-  return $ mconcat $ i:is
+  return $ i:is
+elemToTape :: [ElemType] -> SizeTape
+elemToTape (x:xs) = elemi x xs where
+  elemi p [] = mult 217 e
+  elemi q (x:xs) = mconcat [spacing!(q,x),conv x,elemi x xs]
+  conv (InitElem x) = initUnit x
+  conv (IPElem x) = block1PUnit x
+  conv (ISElem x) = block1SUnit x
+  conv (OElem x) = block0Unit x
+  allRange = ((InitElem 0,InitElem 0),(OElem 29,OElem 29))
+  alls = [InitElem 0..OElem 29]
+  spacing :: Array (ElemType,ElemType) SizeTape
+  spacing = flip mult e <$> listArray allRange spaceList
+  spaceList = map func $ (,) <$> alls <*> alls
+  func (InitElem x,InitElem y) = 3
+  func (IPElem x,InitElem y) = 3
+  func (ISElem x,InitElem y) = 3
+  func (OElem x,InitElem y) = 3
+  func (InitElem x,IPElem y) = 4
+  func (IPElem x,IPElem y) = 4
+  func (ISElem x,IPElem y) = 4
+  func (OElem x,IPElem y) = 4
+  func (InitElem x,ISElem y) = 4
+  func (IPElem x,ISElem y) = 4
+  func (ISElem x,ISElem y) = 4
+  func (OElem x,ISElem y) = 4
+  func (InitElem x,OElem y) = 3
+  func (IPElem x,OElem y) = 3
+  func (ISElem x,OElem y) = 3
+  func (OElem x,OElem y) = 3
 rightUnit :: Integer -> [[T.Binary]] -> SizeTape
-rightUnit d a = snd $ runState (seq d $ cycle a) initIx where
+rightUnit d a = elemToTape $ snd $ runState (seq d $ cycle a) initIx where
   seq 0 _ = return mempty
   seq n (y:ys) = do
     x <- periodUnit y
@@ -305,5 +354,5 @@ automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine _ ws) = Machine $ mconcat [le,ce,re] where
   le = leftUnit d
   ce = centerUnit`mappend`mult 1 e
-  re = rightUnit d $ [[T.I],[T.I]]
+  re = rightUnit d $ [[T.I]]
   -- re = rightUnit d (T.wSize ws) $ fmap snd $ T.words ws
