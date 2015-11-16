@@ -1,0 +1,17 @@
+module CATapes where
+
+caTapeA, caTapeB, caTapeC, caTapeD :: [String]
+caTapeE, caTapeF, caTapeG, caTapeH :: [String]
+caTapeI, caTapeJ, caTapeK, caTapeL :: [String]
+caTapeA = []
+caTapeB = []
+caTapeC = []
+caTapeD = []
+caTapeE = []
+caTapeF = []
+caTapeG = []
+caTapeH = []
+caTapeI = []
+caTapeJ = []
+caTapeK = []
+caTapeL = []
