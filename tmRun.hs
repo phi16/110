@@ -63,7 +63,7 @@ dispHelp = mapM_ putStrLn [
   "- c : Clockwise Turing Machine",
   "- t : Cyclic Tag System",
   "-- f : Don't create binaryEncoding",
-  "-- i : Don't eliminate initialTape",
+  "-- i : Eliminate the initTape",
   "-- s : Efficient but 1Step",
   "- a : Rule 110 Automaton",
   "Running Option",

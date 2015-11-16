@@ -200,5 +200,5 @@ tagSystemize (C.Machine (C.Tape lT cT rT) st r e) ini resultLen = let
     defTape = snd $ con $ concat [[st1 st],map sy ts,replicate ts' mu]
     resPats = ixmap (0,2*z-1) pred $ eArray // changes
   in if ini
-    then construct defTape $ eArray // changes
-    else construct [I] $ resPats // [(0,("[InitTape]",defTape))]
+    then construct [I] $ resPats // [(0,("[InitTape]",defTape))]
+    else construct defTape $ eArray // changes
