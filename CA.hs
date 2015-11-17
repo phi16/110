@@ -137,4 +137,4 @@ automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine ini ws) = Machine $ convert $ concat [le,ce,re] where
   le = [Ri d leftUnit]
   ce = Ci : centerUnit [T.I]
-  re = [Ri (d`div`1+1) $ rightUnit [[T.I]]]
+  re = [Ri (d`div`3+1) $ rightUnit [[T.I,T.O 1,T.I]]]
