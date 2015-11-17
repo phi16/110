@@ -8,46 +8,40 @@ import CATapes
 import qualified Mecha as M
 import Prelude hiding (log,lookup,words)
 import Data.Monoid
-import Data.Array
+import qualified Data.Map as Mi
+import qualified Data.Set as Si
+import Data.Word
+import Data.Array (elems)
 import Data.List (genericLength,genericTake)
-import Control.Applicative
+import Control.Applicative hiding (empty)
 
 import Debug.Trace
 
-data Binary = O | I deriving Eq
-data SizeTape = Tape !Integer ![Binary]
-data Machine = Machine SizeTape
+data Binary = O | I deriving (Eq, Show)
+data MCGen = MCGen (Si.Set Word8) (Mi.Map (Either (Word8,Word8) (Integer,Integer)) Integer) Integer
+data Machine = Machine MCGen
 
 instance Show Machine where
-  show (Machine (Tape _ ts)) = "{" ++ map c ts ++ "}" where
-    c O = '0'
-    c I = '1'
-
-step :: Machine -> Either String Machine
-step (Machine (Tape n ts)) = Right $ Machine $ Tape (n+1) $ update O (O:ts) where
-  update _ [] = []
-  update d (x:y:rs) = c d x y : update x (y:rs)
-  update d [x] = [c d x O] 
-  c O I I = I
-  c _ I O = I
-  c _ O I = I
-  c _ _ _ = O
-
+  show xs = "{Machine}"
 instance M.Mecha Machine where
-  step = step
-  stringify (Machine (Tape l ts)) = unlines [ps,ui] where
-    ps = "x = " ++ show l ++ ", y = 1, rule = W110"
-    ui = map ci ts
-    ci O = 'b'
-    ci I = 'o'
+  step = const $ Left "Inexecutable"
+  stringify (Machine a) = unlines $ ps:he:cs where
+    ps = "[M2] (golly 0.9)"
+    he = "#R w110"
+    cs = a`seq`[""]
 
-instance Monoid SizeTape where
-  mempty = Tape 0 []
-  mappend (Tape x xs) (Tape y ys) = Tape (x+y) $ xs++ys
- 
-repli :: Integer -> [Binary] -> [Binary]
-repli 0 xs = []
-repli n xs = xs ++ repli (n-1) xs
+data RepTape = Bin [Binary] | Rep Integer [RepTape]
+  deriving Show
+trans :: String -> RepTape
+trans xs = Bin $ map f xs where
+  f '0' = O
+  f '1' = I
+instance Monoid RepTape where
+  mempty = Bin []
+  x`mappend`y = Rep 1 [x,y]
+
+makeTree :: RepTape -> MCGen
+makeTree u = trace (show u) $ MCGen Si.empty Mi.empty 0
 
 data Elem = Ai | Bi | Ci | Di | Ei | Fi | Gi | Hi | Ii | Ji | Ki | Li | Ri Integer [Elem]
   deriving Show
@@ -74,21 +68,16 @@ increase d = State $ \(i,m) -> let
 rewrite :: (Integer,Integer) -> State ()
 rewrite (p,q) = State $ \_ -> ((p,q),())
 
-trans :: String -> SizeTape
-trans xs = Tape l $ map f xs where
-  l = fromIntegral $ length xs
-  f '0' = O
-  f '1' = I
-arrays :: [(Integer,[SizeTape])]
+arrays :: [(Integer,[RepTape])]
 arrays = map (\(d,e) -> (d,map trans e)) [
   (0,caTapeA),(2,caTapeB),(11,caTapeC),
   (13,caTapeD),(21,caTapeE),(15,caTapeF),
   (26,caTapeG),(22,caTapeH),(8,caTapeI),
   (14,caTapeJ),(0,caTapeK),(29,caTapeL)]
 
-convert :: [Elem] -> SizeTape
-convert ls = trace (show ls) $ snd $ runState (s ls) (0,3) where
-  s :: [Elem] -> State SizeTape
+convert :: [Elem] -> RepTape
+convert ls = snd $ runState (s ls) (0,3) where
+  s :: [Elem] -> State RepTape
   s [] = return mempty
   s (Ci:xs) = let
       (ix,ar) = arrays !! 2
@@ -135,9 +124,9 @@ rightUnit xs = let
     xs -> xs
 
 automatonize :: Integer -> T.Machine -> Machine
-automatonize d (T.Machine ini ws) = Machine $ convert $ concat [le,ce,re] where
-  initT = T.next ini
-  wordT = map snd $ elems $ T.words ws
+automatonize d (T.Machine ini ws) = Machine $ makeTree $ convert $ concat [le,ce,re] where
+  initT = [T.I] -- T.next ini
+  wordT = [[T.I]] -- map snd $ elems $ T.words ws
   le = [Ri d leftUnit]
   ce = Ci : centerUnit initT
   re = [Ri ((d`div`genericLength wordT)+1) $ rightUnit wordT]
