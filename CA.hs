@@ -70,7 +70,7 @@ instance Monad State where
 increase :: Integer -> State Int
 increase d = State $ \(i,m) -> let
     u = (i+d)`mod`m
-  in ((u,m),fromIntegral u)
+  in ((u,m),fromIntegral i)
 rewrite :: (Integer,Integer) -> State ()
 rewrite (p,q) = State $ \_ -> ((p,q),())
 
@@ -82,9 +82,9 @@ trans xs = Tape l $ map f xs where
 arrays :: [(Integer,[SizeTape])]
 arrays = map (\(d,e) -> (d,map trans e)) [
   (0,caTapeA),(2,caTapeB),(11,caTapeC),
-  (17,caTapeD),(9,caTapeE),(15,caTapeF),
-  (4,caTapeG),(8,caTapeH),(22,caTapeI),
-  (16,caTapeJ),(0,caTapeK),(1,caTapeL)]
+  (13,caTapeD),(21,caTapeE),(15,caTapeF),
+  (26,caTapeG),(22,caTapeH),(8,caTapeI),
+  (14,caTapeJ),(0,caTapeK),(29,caTapeL)]
 
 convert :: [Elem] -> SizeTape
 convert ls = trace (show ls) $ snd $ runState (s ls) (0,3) where
@@ -137,4 +137,5 @@ automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine ini ws) = Machine $ convert $ concat [le,ce,re] where
   le = [Ri d leftUnit]
   ce = Ci : centerUnit [T.I]
-  re = [Ri (d`div`3+1) $ rightUnit [[T.I,T.O 1,T.I]]]
+  re = [Ri (d`div`(fromIntegral $ length tp)+1) $ rightUnit tp]
+  tp = [[T.O 1]]
