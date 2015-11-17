@@ -8,7 +8,7 @@ import CATapes
 import qualified Mecha as M
 import Prelude hiding (log,lookup,words)
 import Data.Monoid
-import qualified Data.Map as Mi
+import qualified Data.Map.Strict as Mi
 import qualified Data.Set as Si
 import Data.Word
 import Data.Array (elems)
@@ -40,8 +40,50 @@ instance Monoid RepTape where
   mempty = Bin []
   x`mappend`y = Rep 1 [x,y]
 
+data MC a = MC {runMC :: (([RepTape],MCGen) -> (([RepTape],MCGen),a))}
+instance Functor MC where
+  fmap f (MC u) = MC $ \i -> fmap f $ u i
+instance Applicative MC where
+  pure x = MC $ \i -> (i,x)
+  MC f <*> MC x = MC $ \i -> let
+      (j,f') = f i
+      (k,x') = x j
+    in (k,f' x')
+instance Monad MC where
+  return x = MC $ \i -> (i,x)
+  MC y >>= f = MC $ \i -> let
+      (j,y') = y i
+    in runMC (f y') j
+
+getRep :: MC (Maybe RepTape)
+getRep = MC $ \case
+  ([],g) -> (([],g),Nothing)
+  (x:xs,g) -> ((xs,g),Just x)
+wordAdd :: [Binary] -> MC Word8
+wordAdd xs = MC $ \(x,MCGen s m c) -> let
+    xs' = foldl (\u e -> u*2 + if e == O then 0 else 1) 0 xs
+    s' = Si.insert xs' s
+  in ((x,MCGen s' m c),xs')
+index :: MC Integer
+index = MC $ \r@(x,MCGen s m c) -> (r,c)
+quadAdd :: (Word8,Word8) -> MC Integer
+quadAdd q = MC $ \r@(x,MCGen s m c) -> case (Left q)`Mi.lookup`m of
+  Just i -> (r,i)
+  Nothing -> let
+      m' = Mi.insert (Left q) c m
+    in ((x,MCGen s m' (c+1)),c)
+treeAdd :: (Integer,Integer) -> MC Integer
+treeAdd q = MC $ \r@(x,MCGen s m c) -> case (Right q)`Mi.lookup`m of
+  Just i -> (r,i)
+  Nothing -> let
+      m' = Mi.insert (Right q) c m
+    in ((x,MCGen s m' (c+1)),c)
 makeTree :: RepTape -> MCGen
-makeTree u = trace (show u) $ MCGen Si.empty Mi.empty 0
+makeTree u = trace (show u) $ snd $ fst $ runMC e ([u], MCGen Si.empty Mi.empty 0) where
+  e = getRep >>= \case
+    Nothing -> return ()
+    Just (Bin xs) -> undefined
+    Just (Rep n ts) -> undefined
 
 data Elem = Ai | Bi | Ci | Di | Ei | Fi | Gi | Hi | Ii | Ji | Ki | Li | Ri Integer [Elem]
   deriving Show
