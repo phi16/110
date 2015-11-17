@@ -114,7 +114,7 @@ convert ls = trace (show ls) $ snd $ runState (s ls) (0,3) where
 leftUnit :: [Elem]
 centerUnit :: [T.Binary] -> [Elem]
 rightUnit :: [[T.Binary]] -> [Elem]
-leftUnit = [Ri 649 [Ai],Bi,Ri 13 [Ai],Bi,Ri 11 [Ai],Bi,Ri 12 [Ai],Bi]
+leftUnit = [Ri 1049 [Ai],Bi,Ri 13 [Ai],Bi,Ri 11 [Ai],Bi,Ri 12 [Ai],Bi]
 centerUnit [T.I] = [Fi,Gi]
 centerUnit [T.O n] = [Ri n [Ei,Gi]]
 centerUnit (T.I:xs) = Fi : Di : centerUnit xs
@@ -124,6 +124,7 @@ rightUnit xs = let
     rightU ([]:xs) = Li : rightU xs
     rightU ((e:es):xs) = Ki : Hi : p e ++ r es ++ rightU xs
     p T.I = [Ii]
+    p (T.O 0) = []
     p (T.O 1) = [Ji]
     p (T.O n) = [Ji, Ri (n-1) [Ii,Ji]]
     r [] = []
@@ -135,7 +136,8 @@ rightUnit xs = let
 
 automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine ini ws) = Machine $ convert $ concat [le,ce,re] where
+  initT = T.next ini
+  wordT = map snd $ elems $ T.words ws
   le = [Ri d leftUnit]
-  ce = Ci : centerUnit [T.I]
-  re = [Ri (d`div`(fromIntegral $ length tp)+1) $ rightUnit tp]
-  tp = [[T.O 1]]
+  ce = Ci : centerUnit initT
+  re = [Ri ((d`div`genericLength wordT)+1) $ rightUnit wordT]
