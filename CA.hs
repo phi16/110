@@ -10,10 +10,11 @@ import qualified Mecha as M
 import Prelude hiding (log,lookup,words)
 import Data.Monoid
 import qualified Data.Map.Strict as Mi
-import qualified Data.Set as Si
 import Data.Word
+import Data.Maybe (fromJust)
 import Data.Array (elems)
-import Data.List (genericLength,genericTake)
+import Data.List (genericLength,genericTake,sortBy)
+import Data.Function
 import Control.Applicative hiding (empty)
 
 data Binary = O | I deriving (Eq, Show)
@@ -23,10 +24,24 @@ instance Show Machine where
   show xs = "{Machine}"
 instance M.Mecha Machine where
   step = const $ Left "Inexecutable"
-  stringify (Machine a) = unlines $ ps:he:cs where
+  stringify (Machine (MCGen _ _ a)) = unlines $ ps:he:cs where
     ps = "[M2] (golly 0.9)"
     he = "#R w110"
-    cs = a`seq`[""]
+    as = sortBy (compare`on`fst.snd) $ Mi.toList a
+    comb ((x,y),(d,_)) = (d,(x,y))
+    symMap = Mi.fromList $ map comb $ take 25 as
+    symi x = sym $ fromJust $ Mi.lookup x symMap
+    sym (1,0) = "*."
+    sym (0,1) = ".*"
+    sym (1,1) = "**"
+    sym (x,0) = let l = symi x in l ++ replicate (length l) '.'
+    sym (0,y) = let l = symi y in replicate (length l) '.' ++ l
+    sym (x,y) = symi x ++ symi y where
+    cs = map f $ ((1,1),(1,1)):as
+    f ((x,y),(_,r))
+      | r < 3 = "........"
+      | r == 3 = sym (x,y)
+      | otherwise = unwords [show r,show x,show y,"0","0"]
 
 data Elem = Ai | Bi | Ci | Di | Ei | Fi | Gi | Hi | Ii | Ji | Ki | Li | Ri Integer [Elem]
   deriving Show
@@ -135,7 +150,7 @@ rightUnit xs = let
 automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine ini ws) = Machine $ makeTree $ convert $ concat [le,ce,re] where
   initT = [T.I] -- T.next ini
-  wordT = [[T.I]] -- map snd $ elems $ T.words ws
+  wordT = [[T.I,T.O 4,T.I]] -- map snd $ elems $ T.words ws
   le = [Ri d leftUnit]
   ce = Ci : centerUnit initT
   re = [Ri ((d`div`genericLength wordT)+1) $ rightUnit wordT]

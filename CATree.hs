@@ -6,7 +6,7 @@ module CATree where
 import qualified Data.Map.Strict as M
 import Debug.Trace
 
-data MCGen = MCGen Int (M.Map (Int,Int) Int)
+data MCGen = MCGen Int Int (M.Map (Int,Int) (Int,Int))
   deriving Show
 data RepTape = Bin [Int] | Rep Integer [RepTape]
   deriving Show
@@ -35,26 +35,30 @@ instance Monad MC where
     in runMC (f y') j
 
 makeTree :: RepTape -> MCGen
-makeTree u = trace (show u) $ fst $ runMC (e 0 [u]) $ MCGen 2 $ M.empty where
+makeTree u = fst $ runMC (e 0 [u]) $ MCGen 2 1 M.empty where
   e :: Int -> [RepTape] -> MC ()
   e i r = doubling r >>= \case
-    (xs,Nothing) -> e (i+1) xs
+    (xs,Nothing) -> succRank >> e (i+1) xs
     ([],Just d)
       | i >= 3 -> return ()
       | otherwise -> do
         z <- putTree d 0
+        succRank
         e (i+1) [Bin [z]]
     (xs,Just d) -> do
       z <- putTree d 0
+      succRank
       e (i+1) $ xs ++ [Bin [z]]
 
 putTree :: Int -> Int -> MC Int
 putTree 0 0 = return 0
-putTree x y = MC $ \(MCGen i m) -> case M.lookup (x,y) m of
+putTree x y = MC $ \(MCGen i r m) -> case M.lookup (x,y) m of
   Nothing -> let
-      m' = M.insert (x,y) i m
-    in (MCGen (i+1) m',i)
-  Just p -> (MCGen i m,p)
+      m' = M.insert (x,y) (i,r) m
+    in (MCGen (i+1) r m',i)
+  Just (p,_) -> (MCGen i r m,p)
+succRank :: MC ()
+succRank = MC $ \(MCGen i r m) -> (MCGen i (r+1) m,())
 
 doubling :: [RepTape] -> MC ([RepTape],Maybe Int)
 doubling [] = return ([],Nothing)
