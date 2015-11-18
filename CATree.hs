@@ -4,6 +4,9 @@
 module CATree where
 
 import qualified Data.Map.Strict as M
+import Data.Monoid
+import Control.Applicative
+
 import Debug.Trace
 
 data MCGen = MCGen Int Int (M.Map (Int,Int) (Int,Int))
