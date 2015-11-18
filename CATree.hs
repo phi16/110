@@ -1,4 +1,7 @@
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE LambdaCase #-}
 
 module CATree where
@@ -6,42 +9,48 @@ module CATree where
 import qualified Data.Map.Strict as M
 import Data.Monoid
 import Control.Applicative
+import Control.DeepSeq
+import GHC.Generics
 
 import Debug.Trace
 
-data MCGen = MCGen Int Int (M.Map (Int,Int) (Int,Int))
-  deriving Show
-data RepTape = Bin [Int] | Rep Integer [RepTape]
-  deriving Show
+data MCGen = MCGen !Int !Int !(M.Map (Int,Int) (Int,Int))
+  deriving (Show, Generic)
+instance NFData MCGen
+data RepTape = Bin ![Int] | Rep !Integer ![RepTape]
+  deriving (Show, Generic)
+instance NFData RepTape
 trans :: String -> RepTape
-trans xs = Bin $ map f xs where
+trans xs = Bin $!! map f xs where
   f '0' = 0
   f '1' = 1
 instance Monoid RepTape where
   mempty = Bin []
-  x`mappend`y = Rep 1 [x,y]
-  mconcat xs = Rep 1 xs
+  x`mappend`y = Rep 1 $!! [x,y]
+  mconcat xs = Rep 1 $!! xs
 
-data MC a = MC {runMC :: MCGen -> (MCGen,a)}
+data MC a = MC {runMC :: !(MCGen -> (MCGen,a))}
 instance Functor MC where
   fmap f (MC u) = MC $ \i -> fmap f $ u i
 instance Applicative MC where
-  pure x = MC $ \i -> (i,x)
+  pure x = MC $ \i -> (force i,x)
   MC f <*> MC x = MC $ \i -> let
       (j,f') = f i
       (k,x') = x j
-    in (k,f' x')
+    in (force k,f' x')
 instance Monad MC where
-  return x = MC $ \i -> (i,x)
+  return x = MC $ \i -> (force i,x)
   MC y >>= f = MC $ \i -> let
       (j,y') = y i
-    in runMC (f y') j
+    in runMC (f y') $ force j
 
 makeTree :: RepTape -> MCGen
-makeTree u = fst $ runMC (e 0 [u]) $ MCGen 2 1 M.empty where
+makeTree (force -> u) = fst $!! runMC (e 0 [u]) $ MCGen 2 1 M.empty where
   e :: Int -> [RepTape] -> MC ()
-  e i r = doubling r >>= \case
-    (xs,Nothing) -> succRank >> e (i+1) xs
+  e i (force -> !r) = trace (show r) $ doubling r >>= \case
+    (xs,Nothing) -> do
+      succRank
+      e (i+1) xs
     ([],Just d)
       | i >= 3 -> return ()
       | otherwise -> do

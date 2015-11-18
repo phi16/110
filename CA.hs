@@ -1,4 +1,6 @@
+{-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE LambdaCase #-}
 
 module CA where
@@ -16,8 +18,9 @@ import Data.Array (elems)
 import Data.List (genericLength,genericTake,sortBy)
 import Data.Function
 import Control.Applicative hiding (empty)
+import Control.DeepSeq
+import GHC.Generics
 
-data Binary = O | I deriving (Eq, Show)
 data Machine = Machine MCGen
 
 instance Show Machine where
@@ -43,8 +46,9 @@ instance M.Mecha Machine where
       | r == 3 = sym (x,y)
       | otherwise = unwords [show r,show x,show y,"0","0"]
 
-data Elem = Ai | Bi | Ci | Di | Ei | Fi | Gi | Hi | Ii | Ji | Ki | Li | Ri Integer [Elem]
-  deriving Show
+data Elem = Ai | Bi | Ci | Di | Ei | Fi | Gi | Hi | Ii | Ji | Ki | Li | Ri Integer ![Elem]
+  deriving (Show, Generic)
+instance NFData Elem
 
 data State a = State {runState :: (Integer,Integer) -> ((Integer,Integer), a)}
 instance Functor State where
@@ -91,7 +95,7 @@ arrays = map (\(d,e) -> (d,map trans e)) [
   (14,caTapeJ),(0,caTapeK),(29,caTapeL)]
 
 convert :: [Elem] -> RepTape
-convert ls = simplify $ snd $ runState (s ls) (0,3) where
+convert (force -> !ls) = simplify $ snd $!! runState (s ls) (0,3) where
   s :: [Elem] -> State RepTape
   s [] = return mempty
   s (Ci:xs) = let
@@ -113,7 +117,7 @@ convert ls = simplify $ snd $ runState (s ls) (0,3) where
     in do
       i <- increase ix
       mappend (ar!!i) <$> s xs
-  simplify xs = poi $ simpl xs
+  simplify xs = poi $!! simpl $!! xs
   simpl :: RepTape -> [RepTape]
   simpl (Bin []) = []
   simpl (Bin xs) = [Bin xs]
@@ -149,8 +153,8 @@ rightUnit xs = let
 
 automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine ini ws) = Machine $ makeTree $ convert $ concat [le,ce,re] where
-  initT = [T.I] -- T.next ini
+  initT = T.next ini
   wordT = [[T.I,T.O 4,T.I]] -- map snd $ elems $ T.words ws
-  le = [Ri d leftUnit]
-  ce = Ci : centerUnit initT
-  re = [Ri ((d`div`genericLength wordT)+1) $ rightUnit wordT]
+  le = force [Ri d leftUnit]
+  ce = force $ Ci : centerUnit initT
+  re = force $ [Ri ((d`div`genericLength wordT)+1) $ rightUnit wordT]
