@@ -5,6 +5,7 @@ module CA where
 
 import qualified CTS as T
 import CATapes
+import CATree
 import qualified Mecha as M
 import Prelude hiding (log,lookup,words)
 import Data.Monoid
@@ -15,10 +16,7 @@ import Data.Array (elems)
 import Data.List (genericLength,genericTake)
 import Control.Applicative hiding (empty)
 
-import Debug.Trace
-
 data Binary = O | I deriving (Eq, Show)
-data MCGen = MCGen (Si.Set Word8) (Mi.Map (Either (Word8,Word8) (Integer,Integer)) Integer) Integer
 data Machine = Machine MCGen
 
 instance Show Machine where
@@ -29,61 +27,6 @@ instance M.Mecha Machine where
     ps = "[M2] (golly 0.9)"
     he = "#R w110"
     cs = a`seq`[""]
-
-data RepTape = Bin [Binary] | Rep Integer [RepTape]
-  deriving Show
-trans :: String -> RepTape
-trans xs = Bin $ map f xs where
-  f '0' = O
-  f '1' = I
-instance Monoid RepTape where
-  mempty = Bin []
-  x`mappend`y = Rep 1 [x,y]
-
-data MC a = MC {runMC :: (([RepTape],MCGen) -> (([RepTape],MCGen),a))}
-instance Functor MC where
-  fmap f (MC u) = MC $ \i -> fmap f $ u i
-instance Applicative MC where
-  pure x = MC $ \i -> (i,x)
-  MC f <*> MC x = MC $ \i -> let
-      (j,f') = f i
-      (k,x') = x j
-    in (k,f' x')
-instance Monad MC where
-  return x = MC $ \i -> (i,x)
-  MC y >>= f = MC $ \i -> let
-      (j,y') = y i
-    in runMC (f y') j
-
-getRep :: MC (Maybe RepTape)
-getRep = MC $ \case
-  ([],g) -> (([],g),Nothing)
-  (x:xs,g) -> ((xs,g),Just x)
-wordAdd :: [Binary] -> MC Word8
-wordAdd xs = MC $ \(x,MCGen s m c) -> let
-    xs' = foldl (\u e -> u*2 + if e == O then 0 else 1) 0 xs
-    s' = Si.insert xs' s
-  in ((x,MCGen s' m c),xs')
-index :: MC Integer
-index = MC $ \r@(x,MCGen s m c) -> (r,c)
-quadAdd :: (Word8,Word8) -> MC Integer
-quadAdd q = MC $ \r@(x,MCGen s m c) -> case (Left q)`Mi.lookup`m of
-  Just i -> (r,i)
-  Nothing -> let
-      m' = Mi.insert (Left q) c m
-    in ((x,MCGen s m' (c+1)),c)
-treeAdd :: (Integer,Integer) -> MC Integer
-treeAdd q = MC $ \r@(x,MCGen s m c) -> case (Right q)`Mi.lookup`m of
-  Just i -> (r,i)
-  Nothing -> let
-      m' = Mi.insert (Right q) c m
-    in ((x,MCGen s m' (c+1)),c)
-makeTree :: RepTape -> MCGen
-makeTree u = trace (show u) $ snd $ fst $ runMC e ([u], MCGen Si.empty Mi.empty 0) where
-  e = getRep >>= \case
-    Nothing -> return ()
-    Just (Bin xs) -> undefined
-    Just (Rep n ts) -> undefined
 
 data Elem = Ai | Bi | Ci | Di | Ei | Fi | Gi | Hi | Ii | Ji | Ki | Li | Ri Integer [Elem]
   deriving Show
@@ -107,8 +50,23 @@ increase :: Integer -> State Int
 increase d = State $ \(i,m) -> let
     u = (i+d)`mod`m
   in ((u,m),fromIntegral i)
+index :: State Integer
+index = State $ \(i,m) -> ((i,m),i)
 rewrite :: (Integer,Integer) -> State ()
 rewrite (p,q) = State $ \_ -> ((p,q),())
+repi :: Integer -> State RepTape -> State RepTape
+repi x a
+  | x < 30 = repu x a
+  | otherwise = do
+    p <- repu 30 a
+    d <- repu (x`mod`30) a
+    return $ Rep (x`div`30) [p]`mappend`d
+repu :: Integer -> State RepTape -> State RepTape
+repu 0 a = return mempty
+repu n a = do
+  i <- a
+  j <- repu (n-1) a
+  return $ i`mappend`j
 
 arrays :: [(Integer,[RepTape])]
 arrays = map (\(d,e) -> (d,map trans e)) [
@@ -118,7 +76,7 @@ arrays = map (\(d,e) -> (d,map trans e)) [
   (14,caTapeJ),(0,caTapeK),(29,caTapeL)]
 
 convert :: [Elem] -> RepTape
-convert ls = snd $ runState (s ls) (0,3) where
+convert ls = simplify $ snd $ runState (s ls) (0,3) where
   s :: [Elem] -> State RepTape
   s [] = return mempty
   s (Ci:xs) = let
@@ -127,10 +85,9 @@ convert ls = snd $ runState (s ls) (0,3) where
       i <- increase 0
       rewrite ((fromIntegral i+ix)`mod`30,30)
       mappend (ar!!i) <$> s xs
-  s (Ri 0 ys:xs) = s xs
   s (Ri n ys:xs) = do
-    v <- s ys
-    vs <- s $ Ri (n-1) ys:xs
+    v <- repi n $ s ys
+    vs <- s xs
     return $ v`mappend`vs
   s (x:xs) = let
       (ix,ar) = arrays !! case x of
@@ -141,6 +98,16 @@ convert ls = snd $ runState (s ls) (0,3) where
     in do
       i <- increase ix
       mappend (ar!!i) <$> s xs
+  simplify xs = poi $ simpl xs
+  simpl :: RepTape -> [RepTape]
+  simpl (Bin []) = []
+  simpl (Bin xs) = [Bin xs]
+  simpl (Rep 0 xs) = []
+  simpl (Rep 1 xs) = concatMap simpl xs
+  simpl (Rep n xs) = [Rep n $ concatMap simpl xs]
+  poi [] = Bin []
+  poi [x] = x
+  poi xs = Rep 1 xs
 
 leftUnit :: [Elem]
 centerUnit :: [T.Binary] -> [Elem]
