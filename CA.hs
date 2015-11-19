@@ -17,6 +17,8 @@ import Data.Maybe (fromJust)
 import Data.Array (elems)
 import Data.List (genericLength,genericTake,sortBy)
 import Data.Function
+import qualified Data.Sequence as Q
+import Data.Sequence (viewl,ViewL(..))
 import Control.Applicative hiding (empty)
 import Control.DeepSeq
 import GHC.Generics
@@ -79,7 +81,7 @@ repi x a
   | otherwise = do
     p <- repu 30 a
     d <- repu (x`mod`30) a
-    return $ Rep (x`div`30) [p]`mappend`d
+    return $ Rep (x`div`30) (uni p)`mappend`d
 repu :: Integer -> State RepTape -> State RepTape
 repu 0 a = return mempty
 repu n a = do
@@ -118,15 +120,18 @@ convert (force -> !ls) = simplify $ snd $!! runState (s ls) (0,3) where
       i <- increase ix
       mappend (ar!!i) <$> s xs
   simplify xs = poi $!! simpl $!! xs
-  simpl :: RepTape -> [RepTape]
-  simpl (Bin []) = []
-  simpl (Bin xs) = [Bin xs]
-  simpl (Rep 0 xs) = []
-  simpl (Rep 1 xs) = concatMap simpl xs
-  simpl (Rep n xs) = [Rep n $ concatMap simpl xs]
-  poi [] = Bin []
-  poi [x] = x
-  poi xs = Rep 1 xs
+  simpl :: RepTape -> Q.Seq RepTape
+  simpl (Bin xs) = case viewl xs of
+    EmptyL -> Q.empty
+    _ -> uni $ Bin xs
+  simpl (Rep 0 xs) = Q.empty
+  simpl (Rep 1 xs) = xs >>= simpl
+  simpl (Rep n xs) = uni $ Rep n $ xs >>= simpl
+  poi y = case viewl y of
+    EmptyL -> Bin Q.empty
+    (x :< xs) -> case viewl xs of
+      EmptyL -> x
+      _ -> Rep 1 y
 
 leftUnit :: [Elem]
 centerUnit :: [T.Binary] -> [Elem]
