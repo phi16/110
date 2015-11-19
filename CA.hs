@@ -18,7 +18,7 @@ import Data.Array (elems)
 import Data.List (genericLength,genericTake,sortBy)
 import Data.Function
 import qualified Data.Sequence as Q
-import Data.Sequence (viewl,ViewL(..))
+import Data.Sequence (viewl,ViewL(..),(|>))
 import Control.Applicative hiding (empty)
 import Control.DeepSeq
 import GHC.Generics
@@ -76,19 +76,22 @@ index = State $ \(i,m) -> ((i,m),i)
 rewrite :: (Integer,Integer) -> State ()
 rewrite (p,q) = State $ \_ -> ((p,q),())
 repi :: Integer -> State RepTape -> State RepTape
-repi x a
-  | x < 30 = repu x a
-  | otherwise = do
-    p <- repu 30 a
-    d <- repu (x`mod`30) a
-    return $ Rep (x`div`30) (uni p)`mappend`d
-repu :: Integer -> State RepTape -> State RepTape
-repu 0 a = return mempty
-repu n a = do
-  i <- a
-  j <- repu (n-1) a
-  return $ i`mappend`j
-
+repi n a = index >>= \i -> repu i 0 n Q.empty where
+  repu :: Integer -> Integer -> Integer -> Q.Seq RepTape -> State RepTape
+  repu i c 0 r = return $ Rep 1 r
+  repu i c n r = do
+    u <- a
+    j <- index
+    if i == j
+      then do
+        diu <- repn (n`mod`(c+1))
+        return $ Rep (n`div`(c+1)) (r |> u)`mappend`diu
+      else repu i (c+1) (n-1) (r |> u)
+  repn 0 = return mempty
+  repn n = do
+    v <- a
+    w <- repn (n-1)
+    return $ v`mappend`w
 arrays :: [(Integer,[RepTape])]
 arrays = map (\(d,e) -> (d,map trans e)) [
   (0,caTapeA),(2,caTapeB),(11,caTapeC),
@@ -138,28 +141,29 @@ centerUnit :: [T.Binary] -> [Elem]
 rightUnit :: [[T.Binary]] -> [Elem]
 leftUnit = [Ri 1049 [Ai],Bi,Ri 13 [Ai],Bi,Ri 11 [Ai],Bi,Ri 12 [Ai],Bi]
 centerUnit [T.I] = [Fi,Gi]
-centerUnit [T.O n] = [Ri n [Ei,Gi]]
+centerUnit [T.O 1] = [Ei,Gi]
+centerUnit [T.O n] = Ri (n-1) [Ei,Di] : [Ei,Gi]
 centerUnit (T.I:xs) = Fi : Di : centerUnit xs
 centerUnit (T.O n:xs) = Ri n [Ei,Di] : centerUnit xs
 rightUnit xs = let
     rightU [] = []
-    rightU ([]:xs) = Li : rightU xs
-    rightU ((e:es):xs) = Ki : Hi : p e ++ r es ++ rightU xs
+    rightU ([]:ys) = Li : rightU ys
+    rightU ((e:es):ys) = Ki : Hi : p e ++ r es ++ rightU ys
     p T.I = [Ii]
     p (T.O 0) = []
     p (T.O 1) = [Ji]
     p (T.O n) = [Ji, Ri (n-1) [Ii,Ji]]
     r [] = []
-    r (T.I:xs) = Ii : Ii : r xs
-    r (T.O n:xs) = Ri n [Ii,Ji] : r xs
+    r (T.I:ys) = Ii : Ii : r ys
+    r (T.O n:ys) = Ri n [Ii,Ji] : r ys
   in case rightU xs of
-    (Ki:xs) -> xs ++ [Ki]
-    xs -> xs
+    (Ki:ys) -> ys ++ [Ki]
+    ys -> ys
 
 automatonize :: Integer -> T.Machine -> Machine
 automatonize d (T.Machine ini ws) = Machine $ makeTree $ convert $ concat [le,ce,re] where
   initT = T.next ini
-  wordT = [[T.I,T.O 4,T.I]] -- map snd $ elems $ T.words ws
+  wordT = map snd $ elems $ T.words ws
   le = force [Ri d leftUnit]
   ce = force $ Ci : centerUnit initT
   re = force $ [Ri ((d`div`genericLength wordT)+1) $ rightUnit wordT]

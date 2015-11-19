@@ -87,29 +87,34 @@ doubling q = case viewl q of
         EmptyL -> return (Q.empty,Just x)
         (e :< ws) -> case e of
           Bin ys -> case viewl ys of
-            EmptyL -> doubling $ Bin (uni x) <| q'
-            _ -> doubling $ Bin (x <| ys) <| q'
+            EmptyL -> doubling $ Bin (uni x) <| ws
+            _ -> doubling $ Bin (x <| ys) <| ws
           Rep n ys -> case viewl ys of
-            EmptyL -> doubling $ Bin (uni x) <| q'
+            EmptyL -> doubling $ Bin (uni x) <| ws
             (r :< rs)
-              | n == 0 -> doubling $ Bin (uni x) <| q'
+              | n == 0 -> doubling $ Bin (uni x) <| ws
               | otherwise -> let
                   y' = rs |> r
-                in doubling $ Bin (uni x) <| r <| Rep (n-1) ys <| rs >< q'
+                in doubling $ Bin (uni x) <| r <| Rep (n-1) y' <| rs >< ws
       (y :< xs) -> do
         z <- putTree x y
         doubling (Bin xs <| q') >>= \case
-          (zs,d) -> return (Bin (uni z) <| zs,d)
-  (Rep n xs :< ys)
-    | n == 0 -> doubling ys
-    | n == 1 -> doubling $ xs >< ys
-    | n`mod`2 == 1 -> doubling $ Rep (n-1) xs <| xs >< ys
-    | otherwise -> doubling xs >>= \case
-      (xs',Nothing) -> doubling ys >>= \case
-        (ys',d) -> return (Rep n xs' <| ys',d)
-      (xs',Just p) -> doubling (Bin (uni p) <| xs) >>= \case
-        (xs'',Nothing) -> do
-          let reps = Rep (n`div`2) $ xs' >< xs''
-          doubling ys >>= \case
-            (ys',d) -> return (reps <| ys',d)
-        (_,Just _) -> error "This shouldn't happen..."
+          (zs,d) -> return $ case viewl zs of
+            EmptyL -> (uni $ Bin (uni z),d)
+            (Bin zi :< zis) -> (Bin (z <| zi) <| zis,d)
+            _ -> (Bin (uni z) <| zs,d)
+  (Rep n xs :< ys) -> case viewl xs of
+    EmptyL -> doubling ys
+    _
+      | n == 0 -> doubling ys
+      | n == 1 -> doubling $ xs >< ys
+      | n`mod`2 == 1 -> doubling $ Rep (n-1) xs <| xs >< ys
+      | otherwise -> doubling xs >>= \case
+        (xs',Nothing) -> doubling ys >>= \case
+          (ys',d) -> return (Rep n xs' <| ys',d)
+        (xs',Just p) -> doubling (Bin (uni p) <| xs) >>= \case
+          (xs'',Nothing) -> do
+            let reps = Rep (n`div`2) $ xs' >< xs''
+            doubling ys >>= \case
+              (ys',d) -> return (reps <| ys',d)
+          (_,Just _) -> error "This shouldn't happen..."
